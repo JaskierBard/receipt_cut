@@ -6,29 +6,33 @@ import LoginScreen from "./components/LoginScreen";
 import HomeScreen from "./components/HomeScreen";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./src/firebaseConfig";
+import Loader from "./components/common/Loader";
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      setLoading(false);
     });
+    return () => unsubscribe();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {user ? (
-          <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         ) : (
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
