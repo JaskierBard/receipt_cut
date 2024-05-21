@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TextInput, Button } from "react-native";
-import { Picker } from '@react-native-picker/picker';
 
 import { saveParagon } from "../src/firebaseChatService";
+import { ReceiptItem } from "./common/ReceiptItem";
+import { ReceiptSum } from "./common/ReceiptSum";
 
 interface Props {
   list: any;
 }
 
-const categories = ['ubrania', 'akcesoria', 'słodycze', 'żywność', 'elektronika', 'książki', 'kosmetyki', 'meble', 'narzędzia', 'biżuteria'];
 
 export const ReceiptList = ({ list }: Props) => {
   const [purchaseItems, setPurchaseItems] = useState(list.receipt_details.purchase_items);
-  const [selectedCategories, setSelectedCategories] = useState(Array(purchaseItems.length).fill(''));
+  // const [selectedCategories, setSelectedCategories] = useState(Array(purchaseItems.length).fill(''));
 
-  const totalValue = purchaseItems.reduce((total: number, item: any) => total + item.price * (item.quantity || 0), 0);
-
+  console.log(purchaseItems)
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
     updatedItems[index].quantity = newQuantity === "" ? 0 : parseInt(newQuantity);
@@ -23,15 +22,18 @@ export const ReceiptList = ({ list }: Props) => {
   };
 
   const handlePriceChange = (index: number, newPrice: string) => {
+    console.log(newPrice)
+    console.log(index)
+
     const updatedItems = [...purchaseItems];
     updatedItems[index].price = newPrice === "" ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
   };
 
   const handleCategoryChange = (index: number, category: string) => {
-    const updatedCategories = [...selectedCategories];
-    updatedCategories[index] = category;
-    setSelectedCategories(updatedCategories);
+    const updatedCategories = [...purchaseItems];
+    updatedCategories[index].category = category;
+    setPurchaseItems(updatedCategories);
   };
 
   return (
@@ -43,59 +45,12 @@ export const ReceiptList = ({ list }: Props) => {
         {list.receipt_details.seller_details.address}
       </Text>
       <ScrollView style={styles.container}>
-        {purchaseItems.map((item: any, index: any) => (
-          <View key={index} style={styles.purchase_item}>
-            <Text style={styles.item_description}>{item.description}</Text>
-            <View style={styles.details}>
-              <View>
-                <Text>Ilość: </Text>
-                <TextInput
-                  style={styles.item_quantity_input}
-                  value={item.quantity === 0 ? "" : String(item.quantity)}
-                  keyboardType="numeric"
-                  onChangeText={(value) => handleQuantityChange(index, value)}
-                />
-              </View>
-              <View>
-                <Text>Cena: </Text>
-                <TextInput
-                  style={styles.item_price_input}
-                  value={item.price === 0 ? "" : String(item.price)}
-                  keyboardType="numeric"
-                  onChangeText={(value) => handlePriceChange(index, value)}
-                />
-              </View>
-              <View>
-                <Text>Kategoria:</Text>
-                <Picker
-                  selectedValue={selectedCategories[index]}
-                  style={{ height: 50, width: 200 }}
-                  onValueChange={(itemValue:any) => handleCategoryChange(index, itemValue)}
-                >
-                  {categories.map((category, index) => (
-                    <Picker.Item key={index} label={category} value={category} />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-          </View>
+        {purchaseItems && purchaseItems.map((item: any, index: number) => (
+          // console.log(index)
+          <ReceiptItem index={index} item={item}  handleQuantityChange={handleQuantityChange} handlePriceChange={handlePriceChange} handleCategoryChange={handleCategoryChange}/>
         ))}
       </ScrollView>
-      <View style={styles.sum_container}>
-        <Text style={styles.total}>
-          Różnica: ({(totalValue - list.receipt_details.total).toFixed(2)} PLN)
-        </Text>
-        <Text
-          style={[
-            styles.total,
-            {
-              color: list.receipt_details.total === totalValue ? "green" : "red",
-            },
-          ]}
-        >
-          Suma: {totalValue.toFixed(2)} PLN
-        </Text>
-      </View>
+      <ReceiptSum purchaseItems={purchaseItems} total={list.receipt_details.total}/>
       <Button
         title="Zapisz"
         onPress={() => {

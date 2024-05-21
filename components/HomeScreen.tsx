@@ -14,7 +14,8 @@ import { OpenAiChat } from "../src/chatAI";
 import { ReceiptList } from "./ReceiptList";
 import * as FileSystem from "expo-file-system";
 import Loader from "./common/Loader";
-import { categories } from "../utils/data";
+import { categories, categoriesPrompt } from "../utils/data";
+import ProcessingLoader from "./common/ProcessingLoader";
 
 const HomeScreen = ({ navigation }: any) => {
   const [image, setImage] = useState<any>(null);
@@ -86,14 +87,13 @@ const HomeScreen = ({ navigation }: any) => {
     );
     const prompt =
       "opisz wedle szablonu kategorią ma być jedna z:" +
-      categories +
+      categoriesPrompt +
       "Pamiętaj że liczba elementów w purchase_items ma być równa elementom na paragonie" +
       szablon +
       "Jeśli podana jest waga produktu a nie jedo ilość to wpisz 1. zawsze zwracaj wynik w formacie JSON";
     const ans = await aiChat.say(prompt, image);
-    setList(ans);
     setProcessing(false);
-
+    setList(ans);
     console.log(ans);
   };
 
@@ -108,26 +108,26 @@ const HomeScreen = ({ navigation }: any) => {
             <ReceiptList list={list} />
           </>
         ) : (
-          <View>
+          <View style={styles.receipt_container}>
             {!processing ? (
               <View>
                 {image && (
                   <>
                     <Image
                       source={{ uri: `data:image/jpeg;base64,${image}` }}
-                      style={{ width: 200, height: 200 }}
+                      style={{ width: '100%', height: '80%' }}
                     />
                     <Button onPress={convert} title="Konwertuj paragon" />
                   </>
                 )}
               </View>
-            ): (<Loader/>)}
+            ): (<ProcessingLoader/>)}
           </View>
         )}
 
-        <Button title="Take Picture" onPress={takePicture} />
+        <Button title={image ? "Zrób inne zdjęcie": "Zrób zdjęcie"} onPress={takePicture} />
 
-        <Button title="Logout" onPress={handleLogout} />
+        {/* <Button title="Logout" onPress={handleLogout} /> */}
       </View>
     </ImageBackground>
   );
@@ -156,6 +156,12 @@ const styles = StyleSheet.create({
     width: 200,
     height: "70%",
   },
+  receipt_container:{
+    width: '100%',
+    height: '80%',
+    display: "flex",
+
+  }
 });
 
 export default HomeScreen;

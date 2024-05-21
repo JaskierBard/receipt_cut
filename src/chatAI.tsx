@@ -55,7 +55,7 @@ export class OpenAiChat {
 
     const answer = response.choices[0].message.content;
     if (answer !== null) {
-      console.log('start 4');
+      console.log(answer ? JSON.parse(answer) : "zły format");
 
       return answer ? JSON.parse(answer) : "zły format";
     } else {
