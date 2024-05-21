@@ -14,6 +14,7 @@ import { OpenAiChat } from "../src/chatAI";
 import { ReceiptList } from "./ReceiptList";
 import * as FileSystem from "expo-file-system";
 import Loader from "./common/Loader";
+import { categories } from "../utils/data";
 
 const HomeScreen = ({ navigation }: any) => {
   const [image, setImage] = useState<any>(null);
@@ -29,8 +30,7 @@ const HomeScreen = ({ navigation }: any) => {
     await signOut(FIREBASE_AUTH);
     navigation.navigate("Login");
   };
-  const categories =
-    "'ubrania', 'akcesoria', 'słodycze', 'żywność', 'elektronika', 'książki', 'kosmetyki', 'meble', 'narzędzia', 'biżuteria'";
+  
   const szablon = `
   "receipt_details": {
     "seller_details": {
