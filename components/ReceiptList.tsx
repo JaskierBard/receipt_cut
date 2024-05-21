@@ -12,9 +12,7 @@ interface Props {
 
 export const ReceiptList = ({ list }: Props) => {
   const [purchaseItems, setPurchaseItems] = useState(list.receipt_details.purchase_items);
-  // const [selectedCategories, setSelectedCategories] = useState(Array(purchaseItems.length).fill(''));
 
-  console.log(purchaseItems)
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
     updatedItems[index].quantity = newQuantity === "" ? 0 : parseInt(newQuantity);
@@ -22,8 +20,6 @@ export const ReceiptList = ({ list }: Props) => {
   };
 
   const handlePriceChange = (index: number, newPrice: string) => {
-    console.log(newPrice)
-    console.log(index)
 
     const updatedItems = [...purchaseItems];
     updatedItems[index].price = newPrice === "" ? 0 : parseFloat(newPrice);
@@ -79,8 +75,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   purchase_item: {
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
+    borderBottomWidth: 2,
+    borderColor: "darkgrey",
     marginBottom: 10,
     paddingBottom: 10,
   },
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   container: {
-    maxHeight: "50%",
+    maxHeight: "65%",
   },
 });
 

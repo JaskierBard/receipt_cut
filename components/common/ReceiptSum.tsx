@@ -14,21 +14,18 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
       (total: number, item: any) => total + item.price * (item.quantity || 0),
       0
     );
-    setTotalValue(sum);
+    setTotalValue(sum.toFixed(2));
   }, [purchaseItems]);
 
   return (
     <View style={styles.sum_container}>
-      <Text style={styles.total}>
-        Różnica: (
-        {(totalValue - total).toFixed(2)} PLN)
-      </Text>
+      
       <Text
         style={[
           styles.total,
           {
             color:
-            total === totalValue
+            (total == totalValue)
                 ? "green"
                 : "red",
           },
@@ -36,12 +33,18 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
       >
         Suma: {total.toFixed(2)} PLN
       </Text>
+      <Text style={styles.total}>
+         (
+        {(totalValue - total).toFixed(2)} PLN)
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   sum_container: {
+    display: "flex",
+    flexDirection: "row",
     borderTopWidth: 1,
     borderColor: "black",
   },

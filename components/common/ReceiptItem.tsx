@@ -11,7 +11,6 @@ interface Props {
   handleCategoryChange: (index: number, value: string) => void;
 }
 export const ReceiptItem = (props: Props) => {
-console.log(props.index);
   return (
     <View key={props.index} style={styles.purchase_item}>
       <Text style={styles.item_description}>{props.item.description}</Text>
