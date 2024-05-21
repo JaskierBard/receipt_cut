@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "./firebaseConfig"; // Zakładam, że masz zdefiniowane FIRESTORE_DB w swoim projekcie
 
 export const saveParagon = async (userIp: string, history: any) => {
@@ -25,5 +25,22 @@ export const saveParagon = async (userIp: string, history: any) => {
   } catch (error) {
     console.error("Error writing document: ", error);
     throw error;
+  }
+};
+
+
+export const getParagons = async (
+  date: string,
+  userIp: string
+): Promise<any[] | null> => {
+  const receiptsRef = doc(collection(FIRESTORE_DB, "recipes"), date);
+  const docSnapshot = await getDoc(receiptsRef);
+
+  if (docSnapshot.exists()) {
+    const receiptsData = docSnapshot.data();
+    const userData = receiptsData[userIp];
+    return userData;
+  } else {
+    return null;
   }
 };

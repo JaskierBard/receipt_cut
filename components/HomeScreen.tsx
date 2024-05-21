@@ -13,10 +13,12 @@ import * as ImagePicker from "expo-image-picker";
 import { OpenAiChat } from "../src/chatAI";
 import { ReceiptList } from "./ReceiptList";
 import * as FileSystem from "expo-file-system";
+import Loader from "./common/Loader";
 
 const HomeScreen = ({ navigation }: any) => {
   const [image, setImage] = useState<any>(null);
   const [list, setList] = useState<any>(null);
+  const [processing, setProcessing] = useState<boolean>(false);
 
   const [imageInfo, setImageInfo] = useState<{
     size: number;
@@ -78,6 +80,7 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const convert = async () => {
+    setProcessing(true);
     const aiChat = new OpenAiChat(
       "Weryfikujesz paragony i wypisujesz wszystkie pozycjie"
     );
@@ -89,6 +92,8 @@ const HomeScreen = ({ navigation }: any) => {
       "Jeśli podana jest waga produktu a nie jedo ilość to wpisz 1. zawsze zwracaj wynik w formacie JSON";
     const ans = await aiChat.say(prompt, image);
     setList(ans);
+    setProcessing(false);
+
     console.log(ans);
   };
 
@@ -104,15 +109,19 @@ const HomeScreen = ({ navigation }: any) => {
           </>
         ) : (
           <View>
-            {image && (
+            {!processing ? (
               <View>
-                <Image
-                  source={{ uri: `data:image/jpeg;base64,${image}` }}
-                  style={{ width: 200, height: 200 }}
-                />
-                <Button onPress={convert} title="Konwertuj paragon" />
+                {image && (
+                  <>
+                    <Image
+                      source={{ uri: `data:image/jpeg;base64,${image}` }}
+                      style={{ width: 200, height: 200 }}
+                    />
+                    <Button onPress={convert} title="Konwertuj paragon" />
+                  </>
+                )}
               </View>
-            )}
+            ): (<Loader/>)}
           </View>
         )}
 

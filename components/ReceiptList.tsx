@@ -19,19 +19,19 @@ export const ReceiptList = ({ list }: Props) => {
   );
 
   const totalValue = purchaseItems.reduce(
-    (total: number, item: any) => total + item.price,
+    (total: number, item: any) => total + item.price * (item.quantity || 0),
     0
   );
 
-  const handleQuantityChange = (index: number, newQuantity: number) => {
+  const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
-    updatedItems[index].quantity = newQuantity;
+    updatedItems[index].quantity = newQuantity === '' ? 0 : parseInt(newQuantity);
     setPurchaseItems(updatedItems);
   };
 
-  const handlePriceChange = (index: number, newPrice: number) => {
+  const handlePriceChange = (index: number, newPrice: string) => {
     const updatedItems = [...purchaseItems];
-    updatedItems[index].price = newPrice;
+    updatedItems[index].price = newPrice === '' ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
   };
 
@@ -52,10 +52,10 @@ export const ReceiptList = ({ list }: Props) => {
                 <Text>Ilość: </Text>
                 <TextInput
                   style={styles.item_quantity_input}
-                  value={String(item.quantity)}
+                  value={item.quantity === 0 ? '' : String(item.quantity)}
                   keyboardType="numeric"
                   onChangeText={(value) =>
-                    handleQuantityChange(index, parseInt(value))
+                    handleQuantityChange(index, value)
                   }
                 />
               </View>
@@ -63,10 +63,10 @@ export const ReceiptList = ({ list }: Props) => {
                 <Text>Cena: </Text>
                 <TextInput
                   style={styles.item_price_input}
-                  value={String(item.price)}
+                  value={item.price === 0 ? '' : String(item.price)}
                   keyboardType="numeric"
                   onChangeText={(value) =>
-                    handlePriceChange(index, parseFloat(value))
+                    handlePriceChange(index, value)
                   }
                 />
               </View>
@@ -108,16 +108,13 @@ const styles = StyleSheet.create({
     color: "white",
     borderWidth: 1,
     borderColor: "#000000",
-    // borderRadius: 5,
     display: "flex",
-    // fontFamily: 'Verdana',
   },
   purchase_item: {
     borderWidth: 1,
     margin: 2,
     padding: 10,
     borderRadius: 5,
-    // backgroundColor: '#517b9e54',
   },
   details: {
     marginTop: 10,
@@ -126,9 +123,7 @@ const styles = StyleSheet.create({
   item_description: {
     fontWeight: "bold",
   },
-  item_quantity: {
-    // fontFamily: 'Courier New',
-  },
+  item_quantity: {},
   item_quantity_input: {
     backgroundColor: "transparent",
     borderWidth: 0,
@@ -146,8 +141,6 @@ const styles = StyleSheet.create({
     width: 80,
   },
   total: {
-    // position: 'absolute',
-    // bottom: 12,
     fontSize: 30,
     textAlign: "center",
     padding: 2,
@@ -164,7 +157,6 @@ const styles = StyleSheet.create({
   container: {
     height: 720,
     overflow: "scroll",
-    // backgroundColor: 'linear-gradient(to right bottom, rgb(131, 130, 129), rgb(76, 79, 126))',
   },
   input_no_spinner: {
     margin: 0,
