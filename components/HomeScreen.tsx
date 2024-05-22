@@ -18,6 +18,7 @@ import Loader from "./common/Loader";
 import { categories, categoriesPrompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
 import { SettingsHandle } from "./Settings";
+import ParagonList from "./Receipts";
 
 const HomeScreen = () => {
   const [image, setImage] = useState<any>(null);
@@ -28,8 +29,6 @@ const HomeScreen = () => {
     size: number;
     format: string;
   } | null>(null);
-
-  
 
   const szablon = `
   "receipt_details": {
@@ -125,14 +124,16 @@ const HomeScreen = () => {
             ) : (
               <ProcessingLoader />
             )}
+            <ParagonList />
           </View>
         )}
+
         <TouchableOpacity style={styles.button} onPress={takePicture}>
           <Text style={styles.buttonText}>
             {image ? "Zrób inne zdjęcie" : "Zrób zdjęcie"}
           </Text>
         </TouchableOpacity>
-        <SettingsHandle/>
+        <SettingsHandle />
         {/* <TouchableOpacity style={{ width: 40, height: 40 , backgroundColor: 'green'}}>
           <Image
             source={{ uri: `./settings.png` }}
