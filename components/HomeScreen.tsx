@@ -6,9 +6,10 @@ import {
   StyleSheet,
   ImageBackground,
   Image,
+  TouchableOpacity,
+  Settings,
 } from "react-native";
-import { signOut } from "firebase/auth";
-import { FIREBASE_AUTH } from "../src/firebaseConfig";
+
 import * as ImagePicker from "expo-image-picker";
 import { OpenAiChat } from "../src/chatAI";
 import { ReceiptList } from "./ReceiptList";
@@ -16,8 +17,9 @@ import * as FileSystem from "expo-file-system";
 import Loader from "./common/Loader";
 import { categories, categoriesPrompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
+import { SettingsHandle } from "./Settings";
 
-const HomeScreen = ({ navigation }: any) => {
+const HomeScreen = () => {
   const [image, setImage] = useState<any>(null);
   const [list, setList] = useState<any>(null);
   const [processing, setProcessing] = useState<boolean>(false);
@@ -27,11 +29,8 @@ const HomeScreen = ({ navigation }: any) => {
     format: string;
   } | null>(null);
 
-  const handleLogout = async () => {
-    await signOut(FIREBASE_AUTH);
-    navigation.navigate("Login");
-  };
   
+
   const szablon = `
   "receipt_details": {
     "seller_details": {
@@ -115,18 +114,31 @@ const HomeScreen = ({ navigation }: any) => {
                   <>
                     <Image
                       source={{ uri: `data:image/jpeg;base64,${image}` }}
-                      style={{ width: '100%', height: '80%' }}
+                      style={{ width: "100%", height: "80%" }}
                     />
-                    <Button onPress={convert} title="Konwertuj paragon" />
+                    <TouchableOpacity style={styles.button} onPress={convert}>
+                      <Text style={styles.buttonText}>Konwertuj paragon</Text>
+                    </TouchableOpacity>
                   </>
                 )}
               </View>
-            ): (<ProcessingLoader/>)}
+            ) : (
+              <ProcessingLoader />
+            )}
           </View>
         )}
-
-        <Button title={image ? "Zrób inne zdjęcie": "Zrób zdjęcie"} onPress={takePicture} />
-
+        <TouchableOpacity style={styles.button} onPress={takePicture}>
+          <Text style={styles.buttonText}>
+            {image ? "Zrób inne zdjęcie" : "Zrób zdjęcie"}
+          </Text>
+        </TouchableOpacity>
+        <SettingsHandle/>
+        {/* <TouchableOpacity style={{ width: 40, height: 40 , backgroundColor: 'green'}}>
+          <Image
+            source={{ uri: `./settings.png` }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </TouchableOpacity> */}
         {/* <Button title="Logout" onPress={handleLogout} /> */}
       </View>
     </ImageBackground>
@@ -137,6 +149,18 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: "cover",
+  },
+  button: {
+    backgroundColor: "green",
+    borderWidth: 1,
+    borderColor: "gold",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "gold",
+    fontSize: 16,
   },
   container: {
     marginTop: "10%",
@@ -156,12 +180,11 @@ const styles = StyleSheet.create({
     width: 200,
     height: "70%",
   },
-  receipt_container:{
-    width: '100%',
-    height: '80%',
+  receipt_container: {
+    width: "100%",
+    height: "80%",
     display: "flex",
-
-  }
+  },
 });
 
 export default HomeScreen;
