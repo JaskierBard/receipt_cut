@@ -19,6 +19,7 @@ import { categories, categoriesPrompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
 import { SettingsHandle } from "./Settings";
 import ParagonList from "./Receipts";
+import TabNavigator from "./Navigation";
 
 const HomeScreen = () => {
   const [image, setImage] = useState<any>(null);
@@ -101,6 +102,7 @@ const HomeScreen = () => {
       style={styles.background}
     >
       <View style={styles.container}>
+
         {list ? (
           <>
             <ReceiptList list={list} />
@@ -124,7 +126,6 @@ const HomeScreen = () => {
             ) : (
               <ProcessingLoader />
             )}
-            <ParagonList />
           </View>
         )}
 

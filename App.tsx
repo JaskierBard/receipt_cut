@@ -1,3 +1,5 @@
+// App.tsx
+
 import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,6 +9,7 @@ import HomeScreen from "./components/HomeScreen";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./src/firebaseConfig";
 import Loader from "./components/common/Loader";
+import TabNavigator from "./components/Navigation"; // Zmień import na właściwy
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +33,10 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {user ? (
-          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+          <>
+            {/* <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
+          </>
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         )}

@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView , StyleSheet} from 'react-native';
 import { getParagons } from '../src/firebaseChatService'; // Upewnij się, że ścieżka jest poprawna
 
+
+interface Props {
+
+}
+
 interface ParagonsData {
     [date: string]: ReceiptDetails[];
   }
@@ -22,7 +27,6 @@ interface ParagonsData {
       const fetchParagons = async () => {
         try {
           const data = await getParagons();
-          console.log(data?.['2024-05-22']);
           setParagons(data?.['2024-05-22']);
         } catch (error) {
           console.error("Błąd podczas pobierania paragonów: ", error);
