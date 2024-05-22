@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, ScrollView, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 
 import { saveParagon } from "../src/firebaseChatService";
 import { ReceiptItem } from "./common/ReceiptItem";
@@ -9,18 +17,19 @@ interface Props {
   list: any;
 }
 
-
 export const ReceiptList = ({ list }: Props) => {
-  const [purchaseItems, setPurchaseItems] = useState(list.receipt_details.purchase_items);
+  const [purchaseItems, setPurchaseItems] = useState(
+    list.receipt_details.purchase_items
+  );
 
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
-    updatedItems[index].quantity = newQuantity === "" ? 0 : parseInt(newQuantity);
+    updatedItems[index].quantity =
+      newQuantity === "" ? 0 : parseInt(newQuantity);
     setPurchaseItems(updatedItems);
   };
 
   const handlePriceChange = (index: number, newPrice: string) => {
-
     const updatedItems = [...purchaseItems];
     updatedItems[index].price = newPrice === "" ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
@@ -41,23 +50,40 @@ export const ReceiptList = ({ list }: Props) => {
         {list.receipt_details.seller_details.address}
       </Text>
       <ScrollView style={styles.container}>
-        {purchaseItems && purchaseItems.map((item: any, index: number) => (
-          // console.log(index)
-          <ReceiptItem index={index} item={item}  handleQuantityChange={handleQuantityChange} handlePriceChange={handlePriceChange} handleCategoryChange={handleCategoryChange}/>
-        ))}
+        {purchaseItems &&
+          purchaseItems.map((item: any, index: number) => (
+            // console.log(index)
+            <ReceiptItem
+              index={index}
+              item={item}
+              handleQuantityChange={handleQuantityChange}
+              handlePriceChange={handlePriceChange}
+              handleCategoryChange={handleCategoryChange}
+            />
+          ))}
       </ScrollView>
-      <ReceiptSum purchaseItems={purchaseItems} total={list.receipt_details.total}/>
-      <Button
-        title="Zapisz"
-        onPress={() => {
-          saveParagon("1", list);
-        }}
+      <ReceiptSum
+        purchaseItems={purchaseItems}
+        total={list.receipt_details.total}
       />
-      <Button title="Podziel" onPress={() => {}} />
+      <View style={styles.button_container}>
+        <TouchableOpacity
+          onPress={() => {
+            saveParagon("1", list);
+          }}
+        >
+          <Image source={require("../assets/images/save.png")} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require("../assets/images/separate.png")} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require("../assets/images/delete.png")} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}; 
-
+};
 
 const styles = StyleSheet.create({
   shop_list: {
@@ -116,7 +142,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     marginTop: 10,
-   
   },
   seller_name: {
     fontWeight: "bold",
@@ -128,13 +153,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
     fontSize: 14,
-    color: 'grey',
+    color: "grey",
     borderBottomWidth: 1,
     borderColor: "black",
   },
   container: {
     maxHeight: "65%",
   },
+  button_container: {
+    display:'flex',
+    flexDirection: 'row',
+    backgroundColor: 'grey',
+
+  }
 });
 
 export default styles;

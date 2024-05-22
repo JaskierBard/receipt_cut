@@ -102,7 +102,6 @@ const HomeScreen = () => {
       style={styles.background}
     >
       <View style={styles.container}>
-
         {list ? (
           <>
             <ReceiptList list={list} />
@@ -128,12 +127,14 @@ const HomeScreen = () => {
             )}
           </View>
         )}
+        {list == null && (
+          <TouchableOpacity style={styles.button} onPress={takePicture}>
+            <Text style={styles.buttonText}>
+              {image ? "Zrób inne zdjęcie" : "Zrób zdjęcie"}
+            </Text>
+          </TouchableOpacity>
+        )}
 
-        <TouchableOpacity style={styles.button} onPress={takePicture}>
-          <Text style={styles.buttonText}>
-            {image ? "Zrób inne zdjęcie" : "Zrób zdjęcie"}
-          </Text>
-        </TouchableOpacity>
         <SettingsHandle />
         {/* <TouchableOpacity style={{ width: 40, height: 40 , backgroundColor: 'green'}}>
           <Image

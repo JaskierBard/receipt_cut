@@ -48,7 +48,7 @@ const TabNavigator = () => {
           title: "Wcześniejsze paragony",
           tabBarIcon: () => (
             <Image
-              source={require("../assets/images/camera.png")}
+              source={require("../assets/images/list.png")}
               style={styles.backgroundImage}
             />
           ),
