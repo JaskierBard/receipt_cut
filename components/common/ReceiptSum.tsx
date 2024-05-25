@@ -10,11 +10,17 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
   useEffect(() => {
-    const sum = purchaseItems.reduce(
-      (total: number, item: any) => total + item.price * (item.quantity || 0),
-      0
-    );
-    setTotalValue(sum.toFixed(2));
+    try {
+      const sum = purchaseItems.reduce(
+        (total: number, item: any) => total + item.price * (item.quantity || 0),
+        0
+      );
+      setTotalValue(sum.toFixed(2));
+
+    } catch (error) {
+      console.log('błąd sumowania kwot na paragonie: '+  error)
+    }
+    
   }, [purchaseItems]);
 
   return (

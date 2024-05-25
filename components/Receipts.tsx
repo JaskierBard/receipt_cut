@@ -1,77 +1,97 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView , StyleSheet} from 'react-native';
-import { getParagons } from '../src/firebaseChatService'; // Upewnij się, że ścieżka jest poprawna
-
-
-interface Props {
-
-}
+import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { getParagons } from '../src/firebaseChatService';
 
 interface ParagonsData {
-    [date: string]: ReceiptDetails[];
-  }
-  
-  interface ReceiptDetails {
-    description: string;
-    price: number;
-    quantity: string;
-    category: string;
+  [date: string]: ReceiptDetails[];
+}
 
-  }
-  const ParagonList = () => {
-    const [paragons, setParagons] = useState<ParagonsData | any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(null);
-  
-    useEffect(() => {
-      const fetchParagons = async () => {
-        try {
-          const data = await getParagons();
-          setParagons(data?.['2024-05-22']);
-        } catch (error) {
-          console.error("Błąd podczas pobierania paragonów: ", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchParagons();
-    }, []);
-  
-    if (loading) {
-      return <ActivityIndicator size="large" color="#0000ff" />;
+interface ReceiptDetails {
+  description: string;
+  price: number;
+  quantity: string;
+  category: string;
+}
+
+const ParagonList = () => {
+  const [paragons, setParagons] = useState<ParagonsData | any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+
+  const fetchParagons = async (date: string) => {
+    try {
+      setLoading(true);
+      const data = await getParagons();
+      setParagons(data?.[date]);
+    } catch (error) {
+      console.error("Błąd podczas pobierania paragonów: ", error);
+    } finally {
+      setLoading(false);
     }
-  
-    if (!paragons) {
-      return <Text style={styles.noDataText}>Brak paragonów do wyświetlenia.</Text>;
+  };
+
+  const onDateChange = (event: any, date?: Date) => {
+    setShowDatePicker(false);
+    if (date) {
+      setSelectedDate(date);
+      const formattedDate = date.toISOString().split('T')[0];
+      fetchParagons(formattedDate);
     }
-    
-    const renderParagonDetails = (paragon: any) => (
-        <>
-        
-          {paragon.map((entry: any, index: any) => (
-            <View key={index} style={styles.detailsContainer}>
-              <Text style={styles.detailText}>Nazwa: {entry.description}</Text>
-              <Text style={styles.detailText}>Kwota: {entry.price} PLN</Text>
-              <Text style={styles.detailText}>Ilość: {entry.quantity}</Text>
-              <Text style={styles.detailText}>Kategoria: {entry.category}</Text>
-            </View>
-          ))}
-          <TouchableOpacity style={styles.backButton} onPress={() => setSelectedParagon(null)}>
-            <Text style={styles.backButtonText}>Wróć do listy</Text>
-          </TouchableOpacity>
-        </>
-      );
-      
-    
-    return (
-      <ScrollView style={styles.container}>
-        {selectedParagon ? (
-          renderParagonDetails(selectedParagon)
-        ) : (
-          <View style={styles.dateSection}>
-            <Text style={styles.dateText}>2024-05-22</Text>
-            {Array.isArray(paragons) ? (
+  };
+
+  useEffect(() => {
+    const formattedDate = selectedDate.toISOString().split('T')[0];
+    fetchParagons(formattedDate);
+  }, [selectedDate]);
+
+
+
+
+  const renderParagonDetails = (paragon: any) => (
+    <>
+      {paragon.map((entry: any, index: any) => (
+        <View key={index} style={styles.detailsContainer}>
+          <Text style={styles.detailText}>Nazwa: {entry.description}</Text>
+          <Text style={styles.detailText}>Kwota: {entry.price} PLN</Text>
+          <Text style={styles.detailText}>Ilość: {entry.quantity}</Text>
+          <Text style={styles.detailText}>Kategoria: {entry.category}</Text>
+        </View>
+      ))}
+      <TouchableOpacity style={styles.backButton} onPress={() => setSelectedParagon(null)}>
+        <Text style={styles.backButtonText}>Wróć do listy</Text>
+      </TouchableOpacity>
+    </>
+  );
+
+  return (
+    <ImageBackground
+      source={require("../assets/background.jpeg")}
+      style={styles.background}
+    >
+    <ScrollView style={styles.container}>
+      <TouchableOpacity onPress={() => { setShowDatePicker(true); setSelectedParagon(null); }} style={styles.datePickerButton}>
+        <Text style={styles.datePickerButtonText}>Wybierz datę</Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={selectedDate}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
+      {selectedParagon ? (
+        renderParagonDetails(selectedParagon)
+      ) : (
+        <View style={styles.dateSection}>
+          <Text style={styles.dateText}>{selectedDate.toISOString().split('T')[0]}</Text>
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            Array.isArray(paragons) ? (
               paragons.map((entry, index) => (
                 <TouchableOpacity
                   key={index}
@@ -83,79 +103,42 @@ interface ParagonsData {
               ))
             ) : (
               <Text style={styles.noDataText}>Brak danych dla tej daty</Text>
-            )}
-          </View>
-        )}
-      </ScrollView>
-    );
-  };
-    
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#f9f9f9',
-      },
-      loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      noDataText: {
-        textAlign: 'center',
-        marginTop: 20,
-        fontSize: 16,
-        color: '#999',
-      },
-      dateSection: {
-        marginBottom: 16,
-      },
-      dateText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 8,
-      },
-      listItem: {
-        padding: 10,
-        backgroundColor: '#fff',
-        marginBottom: 8,
-        borderRadius: 5,
-        borderColor: '#ddd',
-        borderWidth: 1,
-      },
-      listItemText: {
-        fontSize: 16,
-        color: '#333',
-      },
-      detailsContainer: {
-        padding: 16,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        borderColor: '#ddd',
-        borderWidth: 1,
-      },
-      detailsHeader: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      detailText: {
-        fontSize: 16,
-        marginBottom: 8,
-        color: '#555',
-      },
-      backButton: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: '#007BFF',
-        borderRadius: 5,
-        alignItems: 'center',
-      },
-      backButtonText: {
-        color: '#fff',
-        fontSize: 16,
-      },
-    });
-    
-    export default ParagonList;
+            )
+          )}
+        </View>
+      )}
+    </ScrollView>
+    </ImageBackground>
+  );
+};
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  container: {
+    marginTop: "10%",
+    height: "90%",
+    width: "90%",
+    backgroundColor: "rgba(0,0,0,0.8)",
+    // justifyContent: "center",
+    // alignItems: "center",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "gold",
+  },
+  datePickerButton: { padding: 10, backgroundColor: '#007bff', borderRadius: 5, alignItems: 'center', marginVertical: 100 },
+  datePickerButtonText: { color: '#fff', fontSize: 16 },
+  dateSection: { marginVertical: 10 },
+  dateText: { fontSize: 18, fontWeight: 'bold' },
+  listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' },
+  listItemText: { fontSize: 16 },
+  detailsContainer: { padding: 10, backgroundColor: '#f9f9f9', marginVertical: 5 },
+  detailText: { fontSize: 16 },
+  backButton: { padding: 10, backgroundColor: '#007bff', borderRadius: 5, alignItems: 'center', marginVertical: 10 },
+  backButtonText: { color: '#fff', fontSize: 16 },
+  noDataText: { fontSize: 16, textAlign: 'center', marginTop: 20 },
+});
+
+export default ParagonList;
