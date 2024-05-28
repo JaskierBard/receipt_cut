@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: "10%",
-    height: "90%",
-    width: "90%",
+    height: "94%",
+    width: "96%",
     backgroundColor: "rgba(0,0,0,0.8)",
     justifyContent: "center",
     alignItems: "center",

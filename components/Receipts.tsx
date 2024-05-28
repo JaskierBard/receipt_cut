@@ -11,21 +11,24 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getParagons } from "../src/firebaseChatService";
+import Separate from "./Separate";
 
-interface ParagonsData {
+export interface ParagonsData {
   [date: string]: ReceiptDetails[];
 }
 
-interface ReceiptDetails {
+export interface ReceiptDetails {
   description: string;
   price: number;
-  quantity: string;
+  quantity: number;
   category: string;
 }
 
 const ParagonList = () => {
   const [paragons, setParagons] = useState<ParagonsData | any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [separate, setSeparate] = useState<boolean>(false);
+
   const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(
     null
   );
@@ -53,6 +56,10 @@ const ParagonList = () => {
     }
   };
 
+  const handleSeparate = () => {
+    setSeparate(false);
+  };
+
   useEffect(() => {
     const formattedDate = selectedDate.toISOString().split("T")[0];
     fetchParagons(formattedDate);
@@ -77,8 +84,8 @@ const ParagonList = () => {
         >
           <Text style={styles.backButtonText}>Wróć do listy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backButtonText}>Podziel</Text>
+        <TouchableOpacity style={styles.backButton} onPress={()=> setSeparate(true)}>
+          <Text style={styles.backButtonText} >Podziel</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -99,7 +106,13 @@ const ParagonList = () => {
       )}
       <View style={styles.container}>
         {selectedParagon ? (
-          renderParagonDetails(selectedParagon)
+          <>
+            {separate ? (
+              <Separate paragonsData={selectedParagon as any} handleSeparate={handleSeparate}/>
+            ) : (
+              renderParagonDetails(selectedParagon)
+            )}
+          </>
         ) : (
           <View>
             <TouchableOpacity
@@ -121,9 +134,10 @@ const ParagonList = () => {
                 <TouchableOpacity
                   key={index}
                   style={styles.listItem}
-                  onPress={() =>
-                    setSelectedParagon(entry.receipt_details.purchase_items)
-                  }
+                  onPress={() => {
+                    setSelectedParagon(entry.receipt_details.purchase_items),
+                      console.log(entry.receipt_details.purchase_items);
+                  }}
                 >
                   <Text style={styles.listItemText}>
                     {entry.receipt_details.seller_details.name} -{" "}
@@ -144,8 +158,7 @@ const ParagonList = () => {
 const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
-       justifyContent: "center",
-
+    justifyContent: "center",
   },
   background: {
     flex: 1,
@@ -153,8 +166,8 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: "10%",
-    height: "90%",
-    width: "90%",
+    height: "94%",
+    width: "96%",
     backgroundColor: "rgba(0,0,0,0.8)",
     // justifyContent: "center",
     // alignItems: "center",
