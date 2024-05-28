@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
+import { sendMessage } from "../../utils/sendMessage";
 
 interface Props {
   purchaseItems: any;
@@ -41,6 +42,12 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
       ) : (
         <View style={styles.sum_container_small}>
           <Text style={styles.total_small}>({totalValue} PLN)</Text>
+          <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => sendMessage(`Kwota do zwrotu za zakupy: ${String(totalValue)} PLN`)}
+        >
+          <Text style={styles.backButtonText}>Powiadom</Text>
+        </TouchableOpacity>
         </View>
       )}
     </>
@@ -63,13 +70,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   sum_container_small: {
-    // display: "flex",
-    // flexDirection: "row",
+    display: "flex",
+    flexDirection: "row",
     // borderTopWidth: 1,
     // borderColor: "black",
     // backgroundColor: "red",
     // position: "relative",
   },
+  backButton: {
+    padding: 5,
+    backgroundColor: "rgba(238, 245, 39, 0.6)",
+    borderRadius: 5,
+    alignItems: "center",
+    margin: 10,
+  },
+  backButtonText: { color: "#fff", fontSize: 16 },
   total_small: {
     fontSize: 20,
     textAlign: "center",

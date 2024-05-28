@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ReceiptDetails, ParagonsData } from "./Receipts";
 import { ReceiptSum } from "./common/ReceiptSum";
+import { sendMessage } from "../utils/sendMessage";
 
 interface SeparateProps {
   paragonsData: ParagonsData;
@@ -108,6 +109,7 @@ const Separate: React.FC<SeparateProps> = ({
       <View style={styles.basket}>
         <Text style={styles.basketName}>Zakupy dłużnika </Text>
         <ReceiptSum purchaseItems={secondList} />
+       
       </View>
 
       <FlatList
@@ -122,6 +124,12 @@ const Separate: React.FC<SeparateProps> = ({
           onPress={() => handleSeparate()}
         >
           <Text style={styles.backButtonText}>Wróć do listy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => handleSeparate()}
+        >
+          <Text style={styles.backButtonText}>Podziel zakupy</Text>
         </TouchableOpacity>
       </View>
     </View>
