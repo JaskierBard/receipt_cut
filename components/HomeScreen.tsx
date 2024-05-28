@@ -17,7 +17,6 @@ import * as FileSystem from "expo-file-system";
 import Loader from "./common/Loader";
 import { categories, categoriesPrompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
-import { SettingsHandle } from "./Settings";
 import ParagonList from "./Receipts";
 import TabNavigator from "./Navigation";
 
@@ -135,14 +134,6 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
 
-        <SettingsHandle />
-        {/* <TouchableOpacity style={{ width: 40, height: 40 , backgroundColor: 'green'}}>
-          <Image
-            source={{ uri: `./settings.png` }}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </TouchableOpacity> */}
-        {/* <Button title="Logout" onPress={handleLogout} /> */}
       </View>
     </ImageBackground>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getParagons } from '../src/firebaseChatService';
 
@@ -51,30 +51,31 @@ const ParagonList = () => {
 
 
   const renderParagonDetails = (paragon: any) => (
-    <>
+    <View>
+
+    <ScrollView style={{height: '92%'}}>
       {paragon.map((entry: any, index: any) => (
         <View key={index} style={styles.detailsContainer}>
-          <Text style={styles.detailText}>Nazwa: {entry.description}</Text>
+          <Text style={styles.detailText}>{entry.description}</Text>
           <Text style={styles.detailText}>Kwota: {entry.price} PLN</Text>
           <Text style={styles.detailText}>Ilość: {entry.quantity}</Text>
           <Text style={styles.detailText}>Kategoria: {entry.category}</Text>
         </View>
       ))}
-      <TouchableOpacity style={styles.backButton} onPress={() => setSelectedParagon(null)}>
+      
+    </ScrollView>
+    <TouchableOpacity style={styles.backButton} onPress={() => setSelectedParagon(null)}>
         <Text style={styles.backButtonText}>Wróć do listy</Text>
       </TouchableOpacity>
-    </>
+    </View>
   );
 
   return (
     <ImageBackground
-      source={require("../assets/background.jpeg")}
+      source={require("../assets/recent.jpeg")}
       style={styles.background}
     >
-    <ScrollView style={styles.container}>
-      <TouchableOpacity onPress={() => { setShowDatePicker(true); setSelectedParagon(null); }} style={styles.datePickerButton}>
-        <Text style={styles.datePickerButtonText}>Wybierz datę</Text>
-      </TouchableOpacity>
+      
       {showDatePicker && (
         <DateTimePicker
           value={selectedDate}
@@ -83,13 +84,18 @@ const ParagonList = () => {
           onChange={onDateChange}
         />
       )}
+    <View style={styles.container}>
+      
       {selectedParagon ? (
         renderParagonDetails(selectedParagon)
       ) : (
-        <View style={styles.dateSection}>
+        <View>
+        <TouchableOpacity style={styles.dateSection}  onPress={() => { setShowDatePicker(true); setSelectedParagon(null); }}>
           <Text style={styles.dateText}>{selectedDate.toISOString().split('T')[0]}</Text>
+          </TouchableOpacity>
+         
           {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="gold" />
           ) : (
             Array.isArray(paragons) ? (
               paragons.map((entry, index) => (
@@ -105,9 +111,9 @@ const ParagonList = () => {
               <Text style={styles.noDataText}>Brak danych dla tej daty</Text>
             )
           )}
-        </View>
+           </View>
       )}
-    </ScrollView>
+    </View>
     </ImageBackground>
   );
 };
@@ -128,17 +134,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gold",
   },
-  datePickerButton: { padding: 10, backgroundColor: '#007bff', borderRadius: 5, alignItems: 'center', marginVertical: 100 },
-  datePickerButtonText: { color: '#fff', fontSize: 16 },
+  datePickerButton: { padding: 10, backgroundColor: 'grey', borderRadius: 50, alignItems: 'center', bottom: 20, position: 'absolute' },
   dateSection: { marginVertical: 10 },
-  dateText: { fontSize: 18, fontWeight: 'bold' },
-  listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' },
-  listItemText: { fontSize: 16 },
-  detailsContainer: { padding: 10, backgroundColor: '#f9f9f9', marginVertical: 5 },
+  dateText: { fontSize: 18, fontWeight: 'bold', color: 'white' , textAlign: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: 'gold'},
+  listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: 'gold' },
+  listItemText: { fontSize: 16, color:'white' },
+  detailsContainer: { paddingLeft: 10,paddingVertical: 3, backgroundColor: 'rgba(139, 223, 244, 0.7)', margin: 1 },
   detailText: { fontSize: 16 },
-  backButton: { padding: 10, backgroundColor: '#007bff', borderRadius: 5, alignItems: 'center', marginVertical: 10 },
+  backButton: { padding: 5, backgroundColor: 'rgba(238, 245, 39, 0.6)', borderRadius: 5, alignItems: 'center', margin: 10 },
   backButtonText: { color: '#fff', fontSize: 16 },
-  noDataText: { fontSize: 16, textAlign: 'center', marginTop: 20 },
+  noDataText: { fontSize: 16, textAlign: 'center', marginTop: 20, color:'white' },
 });
 
 export default ParagonList;

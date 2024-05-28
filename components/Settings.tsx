@@ -5,66 +5,66 @@ import {
   Image,
   StyleSheet,
   Text,
-  Modal,
-  Button,
+  ImageBackground,
 } from "react-native";
 
 import { signOut } from "firebase/auth";
 import { FIREBASE_AUTH } from "../src/firebaseConfig";
 
-export const SettingsHandle = ({ navigation }: any) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
+const Settings = ({ navigation }: any) => {
   const handleLogout = async () => {
     await signOut(FIREBASE_AUTH);
     navigation.navigate("Login");
   };
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={toggleModal}>
-        <Image
-          source={require("../assets/settings.png")}
-          style={styles.image}
-        />
-      </TouchableOpacity>
-
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={toggleModal}
-      >
+    <ImageBackground
+      source={require("../assets/settings.jpg")}
+      style={styles.background}
+    >
+      <View style={styles.container}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Button
-              title="Logout"
-              onPress={() => {
-                handleLogout;
-                setModalVisible(!modalVisible);
-              }}
-            />
-            {/* <Button title="Close" onPress={toggleModal} /> */}
-          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleLogout;
+            }}
+          >
+            <Text style={styles.buttonText}>Wyloguj</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    position: "absolute",
-    top: 0,
-    right: 0,
-    margin: 10,
+    resizeMode: "cover",
+  },
+  container: {
+    marginTop: "10%",
+    height: "90%",
+    width: "90%",
+    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "gold",
   },
   button: {
-    width: 40,
-    height: 40,
+    backgroundColor: "orange",
+    borderWidth: 1,
+    borderColor: "gold",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "black",
+    fontSize: 16,
   },
   image: {
     width: "100%",
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsHandle;
+export default Settings;

@@ -1,10 +1,9 @@
-// TabNavigator.tsx
-
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, StyleSheet } from "react-native";
 import Receipts from "./Receipts";
 import HomeScreen from "./HomeScreen";
+import Settings from "./Settings";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,7 +25,7 @@ const TabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="missions"
+        name="scan"
         component={HomeScreen} // Zastąp Receipts odpowiednim komponentem
 
         options={{
@@ -37,11 +36,13 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
       <Tab.Screen
-        name="npc"
+        name="receipts"
         component={Receipts} // Zastąp Receipts odpowiednim komponentem
 
         options={{
@@ -52,12 +53,14 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
       <Tab.Screen
         name="settings"
-        component={Receipts} // Zastąp Receipts odpowiednim komponentem
+        component={Settings} // Zastąp Receipts odpowiednim komponentem
 
         options={{
           title: "Ustawienia",
@@ -67,6 +70,8 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
@@ -78,7 +83,7 @@ export default TabNavigator;
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: 40,
+    width: 30,
+    height: 30,
   },
 });
