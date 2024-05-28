@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 
 interface Props {
   purchaseItems: any;
-  total: any;
-
+  total?: any;
 }
 export const ReceiptSum = ({ purchaseItems, total }: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
@@ -16,34 +15,35 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
         0
       );
       setTotalValue(sum.toFixed(2));
-
     } catch (error) {
-      console.log('błąd sumowania kwot na paragonie: '+  error)
+      console.log("błąd sumowania kwot na paragonie: " + error);
     }
-    
   }, [purchaseItems]);
 
   return (
-    <View style={styles.sum_container}>
-      
-      <Text
-        style={[
-          styles.total,
-          {
-            color:
-            (total == totalValue)
-                ? "green"
-                : "red",
-          },
-        ]}
-      >
-        Suma: {total.toFixed(2)} PLN
-      </Text>
-      <Text style={styles.total}>
-         (
-        {(totalValue - total).toFixed(2)} PLN)
-      </Text>
-    </View>
+    <>
+      {total ? (
+        <>
+          <Text
+            style={[
+              styles.total,
+              {
+                color: total === totalValue ? "green" : "red",
+              },
+            ]}
+          >
+            Suma: {total.toFixed(2)} PLN
+          </Text>
+          <Text style={styles.total}>
+            ({(totalValue - total).toFixed(2)} PLN)
+          </Text>
+        </>
+      ) : (
+        <View style={styles.sum_container_small}>
+          <Text style={styles.total_small}>({totalValue} PLN)</Text>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -53,11 +53,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderTopWidth: 1,
     borderColor: "black",
+    backgroundColor: "red",
   },
   total: {
     fontSize: 20,
     textAlign: "center",
+    color: "white",
     padding: 5,
     marginTop: 10,
+  },
+  sum_container_small: {
+    // display: "flex",
+    // flexDirection: "row",
+    // borderTopWidth: 1,
+    // borderColor: "black",
+    // backgroundColor: "red",
+    // position: "relative",
+  },
+  total_small: {
+    fontSize: 20,
+    textAlign: "center",
+    color: "white",
+ 
   },
 });

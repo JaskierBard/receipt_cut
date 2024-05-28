@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { ReceiptDetails, ParagonsData } from "./Receipts";
+import { ReceiptSum } from "./common/ReceiptSum";
 
 interface SeparateProps {
   paragonsData: ParagonsData;
@@ -93,34 +94,22 @@ const Separate: React.FC<SeparateProps> = ({
 
   return (
     <View style={{ flex: 1 }}>
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 20,
-          marginVertical: 10,
-          color: "white",
-        }}
-      >
-        Wszystkie zakupy
-      </Text>
+      <View style={styles.basket}>
+        <Text style={styles.basketName}>Moje zakupy </Text>
+        <ReceiptSum purchaseItems={firstList} />
+      </View>
+
       <FlatList
         data={firstList}
         renderItem={({ item }) => renderItem(item, onDropFirstToSecond)}
         keyExtractor={(item, index) => index.toString()}
         style={{ height: "50%" }}
       />
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 20,
-          marginVertical: 10,
-          color: "white",
-          borderWidth: 1,
-          borderTopColor: "gold",
-        }}
-      >
-        Moje zakupy
-      </Text>
+      <View style={styles.basket}>
+        <Text style={styles.basketName}>Zakupy dłużnika </Text>
+        <ReceiptSum purchaseItems={secondList} />
+      </View>
+
       <FlatList
         data={secondList}
         renderItem={({ item }) => renderItem(item, onDropSecondToFirst)}
@@ -143,6 +132,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  basket: {
+    display: "flex",
+    flexDirection: "row",
+    padding: 5,
+    justifyContent: "center",
+  },
   backButton: {
     padding: 5,
     backgroundColor: "rgba(238, 245, 39, 0.6)",
@@ -151,5 +146,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   backButtonText: { color: "#fff", fontSize: 16 },
+  basketName: {
+    textAlign: "center",
+    fontSize: 20,
+    color: "white",
+  },
 });
 export default Separate;
