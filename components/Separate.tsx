@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { ReceiptDetails, ParagonsData } from "./Receipts";
 import { ReceiptSum } from "./common/ReceiptSum";
-import { sendMessage } from "../utils/sendMessage";
+import { buttonStyles } from "../styles/buttons";
 
 interface SeparateProps {
   paragonsData: ParagonsData;
@@ -118,42 +118,31 @@ const Separate: React.FC<SeparateProps> = ({
         keyExtractor={(item, index) => index.toString()}
         style={{ height: "50%" }}
       />
-      <View style={styles.buttonContainer}>
+      <View style={buttonStyles.container}>
         <TouchableOpacity
-          style={styles.backButton}
+          style={buttonStyles.touchable}
           onPress={() => handleSeparate()}
         >
-          <Text style={styles.backButtonText}>Wróć do listy</Text>
+          <Text style={buttonStyles.text}>Wróć do listy</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.backButton}
+          style={buttonStyles.touchable}
           onPress={() => handleSeparate()}
         >
-          <Text style={styles.backButtonText}>Podziel zakupy</Text>
+          <Text style={buttonStyles.text}>Podziel zakupy</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   basket: {
     display: "flex",
     flexDirection: "row",
     padding: 5,
     justifyContent: "center",
   },
-  backButton: {
-    padding: 5,
-    backgroundColor: "rgba(238, 245, 39, 0.6)",
-    borderRadius: 5,
-    alignItems: "center",
-    margin: 10,
-  },
-  backButtonText: { color: "#fff", fontSize: 16 },
+
   basketName: {
     textAlign: "center",
     fontSize: 20,

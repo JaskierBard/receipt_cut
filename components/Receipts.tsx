@@ -12,6 +12,9 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getParagons } from "../src/firebaseChatService";
 import Separate from "./Separate";
+import { mainStyles } from "../styles/main";
+import { buttonStyles } from "../styles/buttons";
+import { receiptStyles } from "../styles/receipt";
 
 export interface ParagonsData {
   [date: string]: ReceiptDetails[];
@@ -28,7 +31,6 @@ const ParagonList = () => {
   const [paragons, setParagons] = useState<ParagonsData | any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [separate, setSeparate] = useState<boolean>(false);
-
   const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(
     null
   );
@@ -66,26 +68,29 @@ const ParagonList = () => {
   }, [selectedDate]);
 
   const renderParagonDetails = (paragon: any) => (
-    <View>
+    <View style={{width: '100%'}}>
       <ScrollView style={{ height: "92%" }}>
         {paragon.map((entry: any, index: any) => (
-          <View key={index} style={styles.detailsContainer}>
-            <Text style={styles.detailText}>{entry.description}</Text>
-            <Text style={styles.detailText}>Kwota: {entry.price} PLN</Text>
-            <Text style={styles.detailText}>Ilość: {entry.quantity}</Text>
-            <Text style={styles.detailText}>Kategoria: {entry.category}</Text>
+          <View key={index} style={receiptStyles.single_item}>
+            <Text style={receiptStyles.detail_text}>{entry.description}</Text>
+            <Text style={receiptStyles.detail_text}>Kwota: {entry.price} PLN</Text>
+            <Text style={receiptStyles.detail_text}>Ilość: {entry.quantity}</Text>
+            <Text style={receiptStyles.detail_text}>Kategoria: {entry.category}</Text>
           </View>
         ))}
       </ScrollView>
-      <View style={styles.buttonContainer}>
+      <View style={buttonStyles.container}>
         <TouchableOpacity
-          style={styles.backButton}
+          style={buttonStyles.touchable}
           onPress={() => setSelectedParagon(null)}
         >
-          <Text style={styles.backButtonText}>Wróć do listy</Text>
+          <Text style={buttonStyles.text}>Wróć do listy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.backButton} onPress={()=> setSeparate(true)}>
-          <Text style={styles.backButtonText} >Podziel</Text>
+        <TouchableOpacity
+          style={buttonStyles.touchable}
+          onPress={() => setSeparate(true)}
+        >
+          <Text style={buttonStyles.text}>Podziel</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -94,7 +99,7 @@ const ParagonList = () => {
   return (
     <ImageBackground
       source={require("../assets/recent.jpeg")}
-      style={styles.background}
+      style={mainStyles.background}
     >
       {showDatePicker && (
         <DateTimePicker
@@ -104,11 +109,14 @@ const ParagonList = () => {
           onChange={onDateChange}
         />
       )}
-      <View style={styles.container}>
+      <View style={mainStyles.container}>
         {selectedParagon ? (
           <>
             {separate ? (
-              <Separate paragonsData={selectedParagon as any} handleSeparate={handleSeparate}/>
+              <Separate
+                paragonsData={selectedParagon as any}
+                handleSeparate={handleSeparate}
+              />
             ) : (
               renderParagonDetails(selectedParagon)
             )}
@@ -116,7 +124,7 @@ const ParagonList = () => {
         ) : (
           <View>
             <TouchableOpacity
-              style={styles.dateSection}
+              // style={styles.dateSection}
               onPress={() => {
                 setShowDatePicker(true);
                 setSelectedParagon(null);
@@ -156,34 +164,6 @@ const ParagonList = () => {
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  background: {
-    flex: 1,
-    resizeMode: "cover",
-  },
-  container: {
-    marginTop: "10%",
-    height: "94%",
-    width: "96%",
-    backgroundColor: "rgba(0,0,0,0.8)",
-    // justifyContent: "center",
-    // alignItems: "center",
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "gold",
-  },
-  datePickerButton: {
-    padding: 10,
-    backgroundColor: "grey",
-    borderRadius: 50,
-    alignItems: "center",
-    bottom: 20,
-    position: "absolute",
-  },
-  dateSection: { marginVertical: 10 },
   dateText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -195,21 +175,7 @@ const styles = StyleSheet.create({
   },
   listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "gold" },
   listItemText: { fontSize: 16, color: "white" },
-  detailsContainer: {
-    paddingLeft: 10,
-    paddingVertical: 3,
-    backgroundColor: "rgba(139, 223, 244, 0.7)",
-    margin: 1,
-  },
-  detailText: { fontSize: 16 },
-  backButton: {
-    padding: 5,
-    backgroundColor: "rgba(238, 245, 39, 0.6)",
-    borderRadius: 5,
-    alignItems: "center",
-    margin: 10,
-  },
-  backButtonText: { color: "#fff", fontSize: 16 },
+ 
   noDataText: {
     fontSize: 16,
     textAlign: "center",

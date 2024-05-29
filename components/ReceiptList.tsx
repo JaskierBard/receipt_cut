@@ -12,6 +12,7 @@ import {
 import { saveParagon } from "../src/firebaseChatService";
 import { ReceiptItem } from "./common/ReceiptItem";
 import { ReceiptSum } from "./common/ReceiptSum";
+import { buttonStyles } from "../styles/buttons";
 
 interface Props {
   list: any;
@@ -52,7 +53,6 @@ export const ReceiptList = ({ list }: Props) => {
       <ScrollView style={styles.container}>
         {purchaseItems &&
           purchaseItems.map((item: any, index: number) => (
-            // console.log(index)
             <ReceiptItem
               index={index}
               item={item}
@@ -66,7 +66,7 @@ export const ReceiptList = ({ list }: Props) => {
         purchaseItems={purchaseItems}
         total={list.receipt_details.total}
       />
-      <View style={styles.button_container}>
+      <View style={buttonStyles.container}>
         <TouchableOpacity
           onPress={() => {
             saveParagon("1", list);
@@ -160,12 +160,7 @@ const styles = StyleSheet.create({
   container: {
     maxHeight: "65%",
   },
-  button_container: {
-    display:'flex',
-    flexDirection: 'row',
-    backgroundColor: 'grey',
-
-  }
+  
 });
 
 export default styles;

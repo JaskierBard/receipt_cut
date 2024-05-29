@@ -26,7 +26,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="scan"
-        component={HomeScreen} // Zastąp Receipts odpowiednim komponentem
+        component={HomeScreen}
 
         options={{
           title: "Skanuj paragon",
@@ -43,8 +43,7 @@ const TabNavigator = () => {
       </Tab.Screen>
       <Tab.Screen
         name="receipts"
-        component={Receipts} // Zastąp Receipts odpowiednim komponentem
-
+        component={Receipts}
         options={{
           title: "Wcześniejsze paragony",
           tabBarIcon: () => (
@@ -60,7 +59,7 @@ const TabNavigator = () => {
       </Tab.Screen>
       <Tab.Screen
         name="settings"
-        component={Settings} // Zastąp Receipts odpowiednim komponentem
+        component={Settings}
 
         options={{
           title: "Ustawienia",

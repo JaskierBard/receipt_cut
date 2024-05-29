@@ -13,6 +13,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../src/firebaseConfig";
+import { mainStyles } from "../styles/main";
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
@@ -60,7 +61,7 @@ const LoginScreen = ({ navigation }: any) => {
   return (
     <ImageBackground
       source={require("../assets/background.jpeg")}
-      style={styles.background}
+      style={mainStyles.background}
     >
       <View style={styles.container}>
         <TextInput
@@ -86,10 +87,6 @@ const LoginScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: "cover",
-  },
   container: {
     marginTop: "50%",
     height: "50%",
