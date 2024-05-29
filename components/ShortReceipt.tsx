@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   ScrollView,
   ImageBackground,
@@ -14,44 +13,77 @@ import { buttonStyles } from "../styles/buttons";
 import { ReceiptSum } from "./common/ReceiptSum";
 import { saveParagon } from "../src/firebaseChatService";
 import { sumPrices } from "../utils/sumPrices";
+import Loader from "./common/Loader";
+import Toast from "react-native-toast-message";
 
 const ShortReceipt = () => {
-    const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
-    const [purchaseItems, setPurchaseItems] = useState([
+  const [loader, setLoader] = useState<boolean>(false);
+  const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
+  const [purchaseItems, setPurchaseItems] = useState([
+    { description: "", price: 0, quantity: 1, category: "" },
+  ]);
+  const handleSellerChange = (key: string, value: string) => {
+    setSellerDetails({ ...sellerDetails, [key]: value });
+  };
+
+  const handleItemChange = (index: number, key: string, value: string) => {
+    const newItems = [...purchaseItems];
+    if (key === "price" || key === "quantity") {
+      newItems[index] = { ...newItems[index], [key]: Number(value) };
+    } else {
+      newItems[index] = { ...newItems[index], [key]: value };
+    }
+    setPurchaseItems(newItems);
+  };
+
+  const addItem = () => {
+    setPurchaseItems([
+      ...purchaseItems,
       { description: "", price: 0, quantity: 1, category: "" },
-    ]);  
-    const handleSellerChange = (key: string, value: string) => {
-      setSellerDetails({ ...sellerDetails, [key]: value });
-    };
-  
-    const handleItemChange = (index: number, key: string, value: string) => {
-      const newItems = [...purchaseItems];
-      if (key === "price" || key === "quantity") {
-        newItems[index] = { ...newItems[index], [key]: Number(value) };
-      } else {
-        newItems[index] = { ...newItems[index], [key]: value };
-      }
-      setPurchaseItems(newItems);
-    };
-  
-    const addItem = () => {
+    ]);
+  };
+
+  const removeItem = () => {
+    if (purchaseItems.length > 1) {
+      setPurchaseItems(purchaseItems.slice(0, -1));
+    }
+  };
+
+  const handleSave = async () => {
+    setLoader(true);
+    const ans = await saveParagon(
+      "1",
+      {
+        receipt_details: {
+          purchase_items: purchaseItems,
+          seller_details: sellerDetails,
+          total: sumPrices(purchaseItems),
+        },
+      },
+      "recipes"
+    );
+
+    if (ans) {
       setPurchaseItems([
-        ...purchaseItems,
         { description: "", price: 0, quantity: 1, category: "" },
       ]);
-    };
-  
-    const removeItem = () => {
-      if (purchaseItems.length > 1) {
-        setPurchaseItems(purchaseItems.slice(0, -1));
-      }
-    };
-  
-    return (
-      <ImageBackground
-        source={require("../assets/background.jpeg")}
-        style={mainStyles.background}
-      >
+      setSellerDetails({ name: "", address: "" });
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  return (
+    <ImageBackground
+      source={require("../assets/background.jpeg")}
+      style={mainStyles.background}
+    >
+      {loader ? (
+        <View style={mainStyles.container}>
+          <Loader text={"Zapisywanie w bazie danych"} />
+        </View>
+      ) : (
         <View style={mainStyles.container}>
           <TextInput
             style={styles.inputBig}
@@ -104,27 +136,31 @@ const ShortReceipt = () => {
               </View>
             ))}
             <View style={buttonStyles.container}>
-              <TouchableOpacity style={buttonStyles.touchable} onPress={addItem}>
+              <TouchableOpacity
+                style={buttonStyles.touchable}
+                onPress={addItem}
+              >
                 <Text style={buttonStyles.text}>Dodaj produkt</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={buttonStyles.touchable_warning}
                 onPress={removeItem}
-                >
+              >
                 <Text style={buttonStyles.text}>Usuń produkt</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
-        <ReceiptSum purchaseItems={purchaseItems} notify={false}/>
-        <TouchableOpacity
-                style={buttonStyles.touchable}
-                onPress={async() => {
-                  saveParagon("1", {"receipt_details": {"purchase_items": purchaseItems, "seller_details": sellerDetails, "total":sumPrices(purchaseItems)}}, "recipes");
-                }} 
-              >
-                <Text style={buttonStyles.text}>Zapisz paragon</Text>
-              </TouchableOpacity>
-      </View>
+          <ReceiptSum purchaseItems={purchaseItems} notify={false} />
+          <TouchableOpacity
+            style={buttonStyles.touchable}
+            onPress={() => {
+              handleSave();
+            }}
+          >
+            <Text style={buttonStyles.text}>Zapisz paragon</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ImageBackground>
   );
 };

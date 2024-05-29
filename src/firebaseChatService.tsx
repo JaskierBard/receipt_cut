@@ -5,7 +5,6 @@ import { FIRESTORE_DB } from "./firebaseConfig"; // Zakładam, że masz zdefinio
 export const saveParagon = async (userIp: string, history: any, type:string) => {
   const auth = getAuth();
   const user = auth.currentUser;
-  console.log(history)
   if (!user) {
     throw new Error("User is not authenticated");
   }
@@ -19,21 +18,23 @@ export const saveParagon = async (userIp: string, history: any, type:string) => 
     if (docSnap.exists()) {
       const currentRecipes = docSnap.data()[date] || [];
       const updatedMissions = [...currentRecipes, history];
-
       await updateDoc(conversationRef, { [date]: updatedMissions });
+      return true
     } else {
       await setDoc(conversationRef, { [date]: [history] });
+      return true
     }
   } catch (error) {
     console.error("Błąd podczas zapisywania dokumentu: ", error);
-    throw error;
+    return false
   }
 };
 
 
 
+
 interface ParagonsData {
-  [date: string]: any[]; // Możesz dokładniej określić typ zamiast `any`, jeśli wiesz, jakie dane będą przechowywane
+  [date: string]: any[]; 
 }
 
 export const getParagons = async (): Promise<ParagonsData | null> => {

@@ -1,11 +1,11 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { categories } from "../../utils/data";
+import { PurchaseItem } from "../../types/receipt";
 
 interface Props {
-    index: number;
-
-  item: any;
+  index: number;
+  item: PurchaseItem;
   handleQuantityChange: (index: number, value: string) => void;
   handlePriceChange: (index: number, value: string) => void;
   handleCategoryChange: (index: number, value: string) => void;
