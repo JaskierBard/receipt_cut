@@ -13,8 +13,6 @@ export const template = `
   "purchase_items": [ {
     "description": "item_name1",
     "price": 0.00,
-    "price": 0.00,
-
     "quantity": ?,
     "category": ?,
   },

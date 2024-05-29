@@ -97,7 +97,7 @@ const Separate: React.FC<SeparateProps> = ({
     <View style={{ flex: 1 }}>
       <View style={styles.basket}>
         <Text style={styles.basketName}>Moje zakupy </Text>
-        <ReceiptSum purchaseItems={firstList} />
+        <ReceiptSum purchaseItems={firstList} notify={false}/>
       </View>
 
       <FlatList
@@ -108,7 +108,7 @@ const Separate: React.FC<SeparateProps> = ({
       />
       <View style={styles.basket}>
         <Text style={styles.basketName}>Zakupy dłużnika </Text>
-        <ReceiptSum purchaseItems={secondList} />
+        <ReceiptSum purchaseItems={secondList} notify={true}/>
        
       </View>
 

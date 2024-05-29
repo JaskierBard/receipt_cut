@@ -16,6 +16,7 @@ import { systemPrompt, prompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
 import { mainStyles } from "../styles/main";
 import { receiptStyles } from "../styles/receipt";
+import ShortReceipt from "./ShortReceipt";
 
 const HomeScreen = () => {
   const [image, setImage] = useState<any>(null);
@@ -102,12 +103,6 @@ const HomeScreen = () => {
                 {image ? "Zrób inne zdjęcie" : "Zrób zdjęcie"}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={buttonStyles.touchable}
-              onPress={takePicture}
-            >
-              <Text style={buttonStyles.text}>Dodaj krótkie zakupy</Text>
-            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -120,7 +115,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: "70%",
   },
-  
 });
 
 export default HomeScreen;

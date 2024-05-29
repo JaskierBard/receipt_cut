@@ -4,6 +4,7 @@ import { Image, StyleSheet } from "react-native";
 import Receipts from "./Receipts";
 import HomeScreen from "./HomeScreen";
 import Settings from "./Settings";
+import ShortReceipt from "./ShortReceipt";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +34,22 @@ const TabNavigator = () => {
           tabBarIcon: () => (
             <Image
               source={require("../assets/images/camera.png")}
+              style={styles.backgroundImage}
+            />
+          ),
+          headerShown: false,
+
+        }}
+      >
+      </Tab.Screen>
+      <Tab.Screen
+        name="short"
+        component={ShortReceipt}
+        options={{
+          title: "Dodaj paragon",
+          tabBarIcon: () => (
+            <Image
+              source={require("../assets/images/list.png")}
               style={styles.backgroundImage}
             />
           ),

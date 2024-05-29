@@ -5,11 +5,13 @@ import { sendMessage } from "../../utils/sendMessage";
 interface Props {
   purchaseItems: any;
   total?: any;
+  notify: boolean;
 }
-export const ReceiptSum = ({ purchaseItems, total }: Props) => {
+export const ReceiptSum = ({ purchaseItems, total, notify }: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
   useEffect(() => {
+    console.log(purchaseItems);
     try {
       const sum = purchaseItems.reduce(
         (total: number, item: any) => total + item.price * (item.quantity || 0),
@@ -42,12 +44,18 @@ export const ReceiptSum = ({ purchaseItems, total }: Props) => {
       ) : (
         <View style={styles.sum_container_small}>
           <Text style={styles.total_small}>({totalValue} PLN)</Text>
-          <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => sendMessage(`Kwota do zwrotu za zakupy: ${String(totalValue)} PLN`)}
-        >
-          <Text style={styles.backButtonText}>Powiadom</Text>
-        </TouchableOpacity>
+          {notify && (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() =>
+                sendMessage(
+                  `Kwota do zwrotu za zakupy: ${String(totalValue)} PLN`
+                )
+              }
+            >
+              <Text style={styles.backButtonText}>Powiadom</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </>
@@ -89,6 +97,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: "white",
- 
   },
 });

@@ -10,7 +10,7 @@ export const mainStyles = StyleSheet.create({
     marginTop: "10%",
     height: "94%",
     width: "96%",
-    backgroundColor: "rgba(0,100,0,0.8)",
+    backgroundColor: "rgba(0,0,0,0.8)",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
