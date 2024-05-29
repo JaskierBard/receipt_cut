@@ -88,12 +88,12 @@ const Separate: React.FC<SeparateProps> = ({
       }}
     >
       <Text>{item.description}</Text>
-      <Text>Price: {
+      <Text>Cena: {
               item.discount_value === 0
                 ? String(item.price_before_discount)
                 : String(item.price_after_discount)
             }</Text>
-      <Text>Quantity: {item.quantity}</Text>
+      <Text>Ilość: {item.quantity}</Text>
     </TouchableOpacity>
   );
 

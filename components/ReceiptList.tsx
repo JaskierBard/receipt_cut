@@ -22,7 +22,7 @@ export const ReceiptList = ({ list }: Props) => {
   const [purchaseItems, setPurchaseItems] = useState(
     list.receipt_details.purchase_items
   );
-
+console.log(list.receipt_details.purchase_items)
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
     updatedItems[index].quantity =

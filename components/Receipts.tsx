@@ -137,20 +137,20 @@ const ParagonList = () => {
               paragons.map((entry, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.listItem}
+                  style={receiptStyles.single_item}
                   onPress={() => {
                     setSelectedParagon(entry.receipt_details.purchase_items),
                       console.log(entry.receipt_details.purchase_items);
                   }}
                 >
-                  <Text style={styles.listItemText}>
+                  <Text style={receiptStyles.single_item}>
                     {entry.receipt_details.seller_details.name} -{" "}
                     {entry.receipt_details.total} PLN
                   </Text>
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={styles.noDataText}>Brak danych dla tej daty</Text>
+              <Text style={receiptStyles.total}>Brak danych dla tej daty</Text>
             )}
           </View>
         )}
@@ -169,15 +169,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "gold",
   },
-  listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "gold" },
-  listItemText: { fontSize: 16, color: "white" },
+  // listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "gold" },
+  // listItemText: { fontSize: 16, color: "white" },
  
-  noDataText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 20,
-    color: "white",
-  },
+  // noDataText: {
+  //   fontSize: 16,
+  //   textAlign: "center",
+  //   marginTop: 20,
+  //   color: "white",
+  // },
 });
 
 export default ParagonList;
