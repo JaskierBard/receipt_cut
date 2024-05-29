@@ -15,6 +15,7 @@ export const ReceiptItem = (props: Props) => {
     <View key={props.index} style={styles.purchase_item}>
       <Text style={styles.item_description}>{props.item.description}</Text>
       <View style={styles.details}>
+       
         <View>
           <Text>Ilość: </Text>
           <TextInput
@@ -28,9 +29,23 @@ export const ReceiptItem = (props: Props) => {
         </View>
         <View>
           <Text>Cena: </Text>
+          {props.item.discount_value > 0 && (
+          <View>
+            <Text>
+              {props.item.price_before_discount}PLN
+            </Text>
+            <Text>
+              -{props.item.discount_value} PLN
+            </Text>
+          </View>
+        )}
           <TextInput
             style={styles.item_price_input}
-            value={props.item.price === 0 ? "" : String(props.item.price)}
+            value={
+              props.item.discount_value === 0
+                ? String(props.item.price_before_discount)
+                : String(props.item.price_after_discount)
+            }
             keyboardType="numeric"
             onChangeText={(value) =>
               props.handlePriceChange(props.index, value)

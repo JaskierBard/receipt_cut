@@ -32,7 +32,7 @@ export const ReceiptList = ({ list }: Props) => {
 
   const handlePriceChange = (index: number, newPrice: string) => {
     const updatedItems = [...purchaseItems];
-    updatedItems[index].price = newPrice === "" ? 0 : parseFloat(newPrice);
+    updatedItems[index].price_after_discount = newPrice === "" ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
   };
 

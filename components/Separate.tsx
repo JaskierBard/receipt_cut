@@ -6,12 +6,12 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { ReceiptDetails, ParagonsData } from "./Receipts";
 import { ReceiptSum } from "./common/ReceiptSum";
 import { buttonStyles } from "../styles/buttons";
+import { PurchaseItem } from "../types/receipt";
 
 interface SeparateProps {
-  paragonsData: ParagonsData;
+  paragonsData: PurchaseItem[];
   handleSeparate: () => void;
 }
 
@@ -19,12 +19,12 @@ const Separate: React.FC<SeparateProps> = ({
   paragonsData,
   handleSeparate,
 }) => {
-  const [firstList, setFirstList] = useState<ReceiptDetails[]>(
+  const [firstList, setFirstList] = useState<PurchaseItem[]>(
     Object.values(paragonsData).flat()
   );
-  const [secondList, setSecondList] = useState<ReceiptDetails[]>([]);
+  const [secondList, setSecondList] = useState<PurchaseItem[]>([]);
 
-  const onDropFirstToSecond = (item: ReceiptDetails) => {
+  const onDropFirstToSecond = (item: PurchaseItem) => {
     const newFirstList = firstList
       .map((listItem) => {
         if (listItem === item) {
@@ -49,7 +49,7 @@ const Separate: React.FC<SeparateProps> = ({
     setFirstList(newFirstList);
   };
 
-  const onDropSecondToFirst = (item: ReceiptDetails) => {
+  const onDropSecondToFirst = (item: PurchaseItem) => {
     const newSecondList = secondList
       .map((listItem) => {
         if (listItem === item) {
@@ -75,8 +75,8 @@ const Separate: React.FC<SeparateProps> = ({
   };
 
   const renderItem = (
-    item: ReceiptDetails,
-    dropFunction: (item: ReceiptDetails) => void
+    item: PurchaseItem,
+    dropFunction: (item: PurchaseItem) => void
   ) => (
     <TouchableOpacity
       onPress={() => dropFunction(item)}
@@ -88,7 +88,11 @@ const Separate: React.FC<SeparateProps> = ({
       }}
     >
       <Text>{item.description}</Text>
-      <Text>Price: {item.price}</Text>
+      <Text>Price: {
+              item.discount_value === 0
+                ? String(item.price_before_discount)
+                : String(item.price_after_discount)
+            }</Text>
       <Text>Quantity: {item.quantity}</Text>
     </TouchableOpacity>
   );

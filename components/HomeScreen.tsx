@@ -54,6 +54,7 @@ const HomeScreen = () => {
   const convert = async () => {
     setProcessing(true);
     const aiChat = new OpenAiChat(systemPrompt);
+    console.log(prompt)
     const ans = await aiChat.say(prompt, image);
     setProcessing(false);
     setList(ans);

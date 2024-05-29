@@ -12,25 +12,25 @@ export const template = `
   },
   "purchase_items": [ {
     "description": "item_name1",
-    "price": 0.00,
+    "price_before_discount": 0
+    "discount_value": (leave 0 when no discout),
+    "price_after_discount": (leave 0 when no discout),
     "quantity": ?,
     "category": ?,
   },
   {
     "description": "item_name2",
-    "price": ?,
-    "quantity": ?,
-    "category": ?,
+    ...others
   },
 ],
   "total": 0.00,
 }
 `;
-export const systemPrompt ="Weryfikujesz paragony i wypisujesz wszystkie pozycjie";
+export const systemPrompt ="Weryfikujesz paragony i wypisujesz wszystkie pozycje";
 
 export const prompt =
-"opisz wedle szablonu kategorią ma być jedna z:" +
+"Zawsze zwracaj uwagę czy produkt jest objęty promocją, jeśli nie to jako cene zakupu uzupełnij price_before_discount a resztę opisz wedle szablonu kategorią ma być jedna z:" +
 categoriesPrompt +
 "Pamiętaj że liczba elementów w purchase_items ma być równa elementom na paragonie" +
 template +
-"Jeśli podana jest waga produktu a nie jedo ilość to wpisz 1. zawsze zwracaj wynik w formacie JSON";
+"Jeśli podana jest waga produktu a nie jego ilość to wpisz 1. zawsze zwracaj wynik w formacie JSON";

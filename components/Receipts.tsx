@@ -15,23 +15,19 @@ import Separate from "./Separate";
 import { mainStyles } from "../styles/main";
 import { buttonStyles } from "../styles/buttons";
 import { receiptStyles } from "../styles/receipt";
+import { PurchaseItem, ReceiptDetails } from "../types/receipt";
 
-export interface ParagonsData {
-  [date: string]: ReceiptDetails[];
-}
+// export interface ParagonsData {
+//   [date: string]: ReceiptDetails[];
+// }
 
-export interface ReceiptDetails {
-  description: string;
-  price: number;
-  quantity: number;
-  category: string;
-}
+
 
 const ParagonList = () => {
-  const [paragons, setParagons] = useState<ParagonsData | any>(null);
+  const [paragons, setParagons] = useState<ReceiptDetails | any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [separate, setSeparate] = useState<boolean>(false);
-  const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(
+  const [selectedParagon, setSelectedParagon] = useState<PurchaseItem[] | null>(
     null
   );
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -114,7 +110,7 @@ const ParagonList = () => {
           <>
             {separate ? (
               <Separate
-                paragonsData={selectedParagon as any}
+                paragonsData={selectedParagon}
                 handleSeparate={handleSeparate}
               />
             ) : (

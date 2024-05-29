@@ -11,13 +11,14 @@ interface Props {
 export const ReceiptSum = ({ purchaseItems, total, notify }: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
-  useEffect(() => {
+ useEffect(() => {
     console.log(purchaseItems);
     try {
-       const sum = purchaseItems.reduce(
-        (total: number, item: any) => total + item.price * (item.quantity || 0),
-        0
-      );
+      const sum = purchaseItems.reduce((total: number, item: any) => {
+        const itemPrice = item.discount_value ? item.price_after_discount : item.price_before_discount;
+        // console.log(total + itemPrice * (item.quantity || 0))
+        return total + itemPrice;
+      }, 0);
       setTotalValue(parseFloat(sum.toFixed(2)));
     } catch (error) {
       console.log("błąd sumowania kwot na paragonie: " + error);
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   total: {
     fontSize: 20,
     textAlign: "center",
-    color: "white",
+    color: "black",
     padding: 5,
     marginTop: 10,
   },

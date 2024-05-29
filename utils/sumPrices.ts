@@ -4,7 +4,7 @@ export const sumPrices = (purchaseItems: PurchaseItem[]) => {
   console.log(purchaseItems);
   try {
     const sum = purchaseItems.reduce(
-      (total: number, item: any) => total + item.price * (item.quantity || 0),
+      (total: number, item: any) => total + item.price_after_discount * (item.quantity || 0),
       0
     );
     return sum.toFixed(2);

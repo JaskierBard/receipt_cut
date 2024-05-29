@@ -14,13 +14,12 @@ import { ReceiptSum } from "./common/ReceiptSum";
 import { saveParagon } from "../src/firebaseChatService";
 import { sumPrices } from "../utils/sumPrices";
 import Loader from "./common/Loader";
-import Toast from "react-native-toast-message";
 
 const ShortReceipt = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
   const [purchaseItems, setPurchaseItems] = useState([
-    { description: "", price: 0, quantity: 1, category: "" },
+    { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
   ]);
   const handleSellerChange = (key: string, value: string) => {
     setSellerDetails({ ...sellerDetails, [key]: value });
@@ -39,7 +38,7 @@ const ShortReceipt = () => {
   const addItem = () => {
     setPurchaseItems([
       ...purchaseItems,
-      { description: "", price: 0, quantity: 1, category: "" },
+      { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
     ]);
   };
 
@@ -65,7 +64,7 @@ const ShortReceipt = () => {
 
     if (ans) {
       setPurchaseItems([
-        { description: "", price: 0, quantity: 1, category: "" },
+        { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
       ]);
       setSellerDetails({ name: "", address: "" });
       setLoader(false);
@@ -115,7 +114,7 @@ const ShortReceipt = () => {
                   <TextInput
                     style={styles.input_small}
                     placeholder="Cena"
-                    value={item.price === 0 ? "" : String(item.price)}
+                    value={item.price_after_discount === 0 ? "" : String(item.price_after_discount)}
                     onChangeText={(text) =>
                       handleItemChange(index, "price", text)
                     }

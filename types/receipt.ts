@@ -5,7 +5,9 @@ export interface SellerDetails {
   
   export interface PurchaseItem {
     description: string;
-    price: number;
+    price_before_discount: number;
+    discount_value: number,
+    price_after_discount: number,
     quantity: number;
     category: string;
   }
