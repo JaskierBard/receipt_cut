@@ -65,11 +65,12 @@ export const ReceiptList = ({ list }: Props) => {
       <ReceiptSum
         purchaseItems={purchaseItems}
         total={list.receipt_details.total}
+        notify={false}
       />
       <View style={buttonStyles.container}>
         <TouchableOpacity
           onPress={() => {
-            saveParagon("1", list);
+            saveParagon("1", list, "recipes");
           }}
         >
           <Image source={require("../assets/images/save.png")} />

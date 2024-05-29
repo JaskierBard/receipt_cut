@@ -12,6 +12,8 @@ import {
 import { mainStyles } from "../styles/main";
 import { buttonStyles } from "../styles/buttons";
 import { ReceiptSum } from "./common/ReceiptSum";
+import { saveParagon } from "../src/firebaseChatService";
+import { sumPrices } from "../utils/sumPrices";
 
 const ShortReceipt = () => {
     const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
@@ -108,12 +110,20 @@ const ShortReceipt = () => {
               <TouchableOpacity
                 style={buttonStyles.touchable_warning}
                 onPress={removeItem}
-              >
+                >
                 <Text style={buttonStyles.text}>Usuń produkt</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
         <ReceiptSum purchaseItems={purchaseItems} notify={false}/>
+        <TouchableOpacity
+                style={buttonStyles.touchable}
+                onPress={async() => {
+                  saveParagon("1", {"receipt_details": {"purchase_items": purchaseItems, "seller_details": sellerDetails, "total":sumPrices(purchaseItems)}}, "recipes");
+                }} 
+              >
+                <Text style={buttonStyles.text}>Zapisz paragon</Text>
+              </TouchableOpacity>
       </View>
     </ImageBackground>
   );

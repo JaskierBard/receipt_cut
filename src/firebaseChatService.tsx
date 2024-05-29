@@ -2,10 +2,10 @@ import { getAuth } from "firebase/auth";
 import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "./firebaseConfig"; // Zakładam, że masz zdefiniowane FIRESTORE_DB w swoim projekcie
 
-export const saveParagon = async (userIp: string, history: any) => {
+export const saveParagon = async (userIp: string, history: any, type:string) => {
   const auth = getAuth();
   const user = auth.currentUser;
-
+  console.log(history)
   if (!user) {
     throw new Error("User is not authenticated");
   }
@@ -13,7 +13,7 @@ export const saveParagon = async (userIp: string, history: any) => {
   const date = new Date().toISOString().split("T")[0];
 
   try {
-    const conversationRef = doc(collection(FIRESTORE_DB, "recipes"), user.uid);
+    const conversationRef = doc(collection(FIRESTORE_DB, type), user.uid);
     const docSnap = await getDoc(conversationRef);
 
     if (docSnap.exists()) {
@@ -29,6 +29,8 @@ export const saveParagon = async (userIp: string, history: any) => {
     throw error;
   }
 };
+
+
 
 interface ParagonsData {
   [date: string]: any[]; // Możesz dokładniej określić typ zamiast `any`, jeśli wiesz, jakie dane będą przechowywane

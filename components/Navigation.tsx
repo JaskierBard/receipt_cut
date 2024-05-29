@@ -49,7 +49,7 @@ const TabNavigator = () => {
           title: "Dodaj paragon",
           tabBarIcon: () => (
             <Image
-              source={require("../assets/images/list.png")}
+              source={require("../assets/images/receipt.png")}
               style={styles.backgroundImage}
             />
           ),

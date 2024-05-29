@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { sendMessage } from "../../utils/sendMessage";
+import { PurchaseItem } from "../../types/receipt";
 
 interface Props {
-  purchaseItems: any;
+  purchaseItems: PurchaseItem[];
   total?: any;
   notify: boolean;
 }
@@ -13,11 +14,11 @@ export const ReceiptSum = ({ purchaseItems, total, notify }: Props) => {
   useEffect(() => {
     console.log(purchaseItems);
     try {
-      const sum = purchaseItems.reduce(
+       const sum = purchaseItems.reduce(
         (total: number, item: any) => total + item.price * (item.quantity || 0),
         0
       );
-      setTotalValue(sum.toFixed(2));
+      setTotalValue(parseFloat(sum.toFixed(2)));
     } catch (error) {
       console.log("błąd sumowania kwot na paragonie: " + error);
     }
