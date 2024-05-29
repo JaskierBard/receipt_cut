@@ -64,17 +64,25 @@ const ParagonList = () => {
   }, [selectedDate]);
 
   const renderParagonDetails = (paragon: any) => (
-    <View style={{width: '100%'}}>
+    <View style={receiptStyles.shop_list}>
+      <Text style={receiptStyles.seller_name}>{paragon.seller_details.name}</Text>
+      <Text style={receiptStyles.seller_address}>{paragon.seller_details.address}</Text>
+
       <ScrollView style={{ height: "92%" }}>
-        {paragon.map((entry: any, index: any) => (
-          <View key={index} style={receiptStyles.single_item}>
-            <Text style={receiptStyles.detail_text}>{entry.description}</Text>
-            <Text style={receiptStyles.detail_text}>Kwota: {entry.price} PLN</Text>
+        {paragon.purchase_items.map((entry: any, index: any) => (
+          <View key={index} style={receiptStyles.purchase_item}>
+            <Text style={receiptStyles.item_description}>{entry.description}</Text>
+            <Text style={receiptStyles.detail_text}>Kwota: {
+              entry.discount_value === 0
+                ? String(entry.price_before_discount)
+                : String(entry.price_after_discount)
+            } PLN</Text>
             <Text style={receiptStyles.detail_text}>Ilość: {entry.quantity}</Text>
             <Text style={receiptStyles.detail_text}>Kategoria: {entry.category}</Text>
           </View>
         ))}
       </ScrollView>
+      <Text style={receiptStyles.seller_address}>{paragon.total}</Text>
       <View style={buttonStyles.container}>
         <TouchableOpacity
           style={buttonStyles.touchable}
@@ -137,13 +145,12 @@ const ParagonList = () => {
               paragons.map((entry, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={receiptStyles.single_item}
+                  style={receiptStyles.purchase_item}
                   onPress={() => {
-                    setSelectedParagon(entry.receipt_details.purchase_items),
-                      console.log(entry.receipt_details.purchase_items);
+                    setSelectedParagon(entry.receipt_details)
                   }}
                 >
-                  <Text style={receiptStyles.single_item}>
+                  <Text style={receiptStyles.purchase_item}>
                     {entry.receipt_details.seller_details.name} -{" "}
                     {entry.receipt_details.total} PLN
                   </Text>

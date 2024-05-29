@@ -9,6 +9,7 @@ export interface SellerDetails {
     discount_value: number,
     price_after_discount: number,
     quantity: number;
+    unit: string;
     category: string;
   }
   

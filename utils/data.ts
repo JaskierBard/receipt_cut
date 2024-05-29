@@ -16,6 +16,7 @@ export const template = `
     "discount_value": (leave 0 when no discout),
     "price_after_discount": (leave 0 when no discout),
     "quantity": ?,
+    "unit": "szt or kg" (if quantity is decimal number its probably weight so return kg if not its probably pieces so return szt.),
     "category": ?,
   },
   {
@@ -33,4 +34,4 @@ export const prompt =
 categoriesPrompt +
 "Pamiętaj że liczba elementów w purchase_items ma być równa elementom na paragonie" +
 template +
-"Jeśli podana jest waga produktu a nie jego ilość to wpisz 1. zawsze zwracaj wynik w formacie JSON";
+"zawsze zwracaj wynik w formacie JSON";

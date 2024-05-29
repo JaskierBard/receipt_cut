@@ -8,18 +8,14 @@ export const receiptStyles = StyleSheet.create({
     display: "flex",
   },
 
-  single_item: {
-    paddingLeft: 10,
-    paddingVertical: 3,
-    margin: 1,
-    backgroundColor: "rgba(139, 223, 244, 0.7)",
-  },
+ 
   detail_text: { fontSize: 16 },
 
   shop_list: {
     width: "90%",
     margin: "5%",
-    backgroundColor: "white",
+    maxHeight: "95%",
+    backgroundColor: "lightgray",
     padding: 10,
     borderWidth: 1,
     borderColor: "#000000",
@@ -38,31 +34,24 @@ export const receiptStyles = StyleSheet.create({
   },
   details: {
     marginTop: 10,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
   },
   item_description: {
     fontWeight: "bold",
     marginBottom: 5,
   },
-  item_quantity_input: {
+  item_input: {
     backgroundColor: "transparent",
     borderWidth: 1,
     borderColor: "#ddd",
     fontSize: 16,
-    padding: 5,
+    padding: 1,
     width: 80,
+    height: 20,
     textAlign: "center",
   },
-  item_price_input: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    fontSize: 16,
-    padding: 5,
-    width: 80,
-    textAlign: "center",
-  },
+
   sum_container: {
     borderTopWidth: 1,
     borderColor: "black",

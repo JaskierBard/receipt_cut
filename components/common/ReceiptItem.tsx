@@ -2,6 +2,7 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { categories } from "../../utils/data";
 import { PurchaseItem } from "../../types/receipt";
+import { receiptStyles } from "../../styles/receipt";
 
 interface Props {
   index: number;
@@ -12,22 +13,22 @@ interface Props {
 }
 export const ReceiptItem = (props: Props) => {
   return (
-    <View key={props.index} style={styles.purchase_item}>
-      <Text style={styles.item_description}>{props.item.description}</Text>
-      <View style={styles.details}>
+    <View key={props.index} style={receiptStyles.purchase_item}>
+      <Text style={receiptStyles.item_description}>{props.item.description}</Text>
+      <View style={receiptStyles.details}>
        
-        <View>
+        <View style={{flexDirection:'row'}}>
           <Text>Ilość: </Text>
           <TextInput
-            style={styles.item_quantity_input}
+            style={receiptStyles.item_input}
             value={props.item.quantity === 0 ? "" : String(props.item.quantity)}
             keyboardType="numeric"
             onChangeText={(value) =>
               props.handleQuantityChange(props.index, value)
             }
-          />
+          /><Text>{props.item.unit}</Text>
         </View>
-        <View>
+        <View style={{flexDirection:'row'}}>
           <Text>Cena: </Text>
           {props.item.discount_value > 0 && (
           <View>
@@ -40,7 +41,7 @@ export const ReceiptItem = (props: Props) => {
           </View>
         )}
           <TextInput
-            style={styles.item_price_input}
+            style={receiptStyles.item_input}
             value={
               props.item.discount_value === 0
                 ? String(props.item.price_before_discount)
@@ -52,11 +53,11 @@ export const ReceiptItem = (props: Props) => {
             }
           />
         </View>
-        <View>
+        <View style={{flexDirection:'row'}}>
           <Text>Kategoria:</Text>
           <Picker
             selectedValue={props.item.category}
-            style={{ height: 50, width: 200 }}
+            style={{ height: 20, width: 150, backgroundColor:'grey' }}
             onValueChange={(itemValue: any) =>
               props.handleCategoryChange(props.index, itemValue)
             }
@@ -71,38 +72,4 @@ export const ReceiptItem = (props: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  purchase_item: {
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
-    marginBottom: 10,
-    paddingBottom: 10,
-  },
-  details: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  item_description: {
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  item_quantity_input: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    fontSize: 16,
-    padding: 5,
-    width: 80,
-    textAlign: "center",
-  },
-  item_price_input: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    fontSize: 16,
-    padding: 5,
-    width: 80,
-    textAlign: "center",
-  },
-});
+
