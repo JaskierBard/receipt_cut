@@ -15,7 +15,7 @@ export const receiptStyles = StyleSheet.create({
     width: "90%",
     margin: "5%",
     maxHeight: "95%",
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
     padding: 10,
     borderWidth: 1,
     borderColor: "#000000",
@@ -31,10 +31,14 @@ export const receiptStyles = StyleSheet.create({
     borderColor: "darkgrey",
     marginBottom: 10,
     paddingBottom: 10,
+    display: "flex",
+  },
+  purchase_item_text: {
+    color: "white",
   },
   details: {
     marginTop: 10,
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   item_description: {
@@ -46,7 +50,7 @@ export const receiptStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     fontSize: 16,
-    padding: 1,
+    fontWeight: 'bold',
     width: 80,
     height: 20,
     textAlign: "center",
@@ -62,6 +66,12 @@ export const receiptStyles = StyleSheet.create({
     padding: 5,
     marginTop: 10,
   },
+  price: {
+    // backgroundColor: 'red',
+    width: 100,
+
+  },
+
   seller_name: {
     fontWeight: "bold",
     textAlign: "center",

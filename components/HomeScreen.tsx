@@ -16,7 +16,6 @@ import { systemPrompt, prompt } from "../utils/data";
 import ProcessingLoader from "./common/ProcessingLoader";
 import { mainStyles } from "../styles/main";
 import { receiptStyles } from "../styles/receipt";
-import ShortReceipt from "./ShortReceipt";
 
 const HomeScreen = () => {
   const [image, setImage] = useState<any>(null);
@@ -33,7 +32,7 @@ const HomeScreen = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [3, 6],
-      quality: 1,
+      quality: 0.4,
       base64: true,
     });
 
@@ -46,7 +45,6 @@ const HomeScreen = () => {
       if (info.exists) {
         const sizeInMB = info.size / (1024 * 1024);
         setImageInfo({ size: sizeInMB, format: format || "unknown" });
-        console.log({ size: sizeInMB, format: format });
       }
     }
   };

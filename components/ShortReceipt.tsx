@@ -14,12 +14,13 @@ import { ReceiptSum } from "./common/ReceiptSum";
 import { saveParagon } from "../src/firebaseChatService";
 import { sumPrices } from "../utils/sumPrices";
 import Loader from "./common/Loader";
+import { PurchaseItem } from "../types/receipt";
 
 const ShortReceipt = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
-  const [purchaseItems, setPurchaseItems] = useState([
-    { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
+  const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([
+    { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
   ]);
   const handleSellerChange = (key: string, value: string) => {
     setSellerDetails({ ...sellerDetails, [key]: value });
@@ -38,7 +39,7 @@ const ShortReceipt = () => {
   const addItem = () => {
     setPurchaseItems([
       ...purchaseItems,
-      { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
+      { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
     ]);
   };
 
@@ -64,7 +65,7 @@ const ShortReceipt = () => {
 
     if (ans) {
       setPurchaseItems([
-        { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, quantity: 1, category: "" },
+        { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
       ]);
       setSellerDetails({ name: "", address: "" });
       setLoader(false);

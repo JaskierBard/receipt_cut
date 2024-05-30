@@ -20,10 +20,11 @@ const Separate: React.FC<SeparateProps> = ({
   handleSeparate,
 }) => {
   const [firstList, setFirstList] = useState<PurchaseItem[]>(
-    Object.values(paragonsData).flat()
+    Object.values(paragonsData)
+      .flat()
+      .filter(item => item && item.description && item.price_before_discount)
   );
   const [secondList, setSecondList] = useState<PurchaseItem[]>([]);
-
   const onDropFirstToSecond = (item: PurchaseItem) => {
     const newFirstList = firstList
       .map((listItem) => {

@@ -20,5 +20,12 @@ export const buttonStyles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
   },
-  text: { color: "#fff", fontSize: 16 },
+  touchable_dark: {
+    padding: 7,
+    backgroundColor: "rgba(100, 221, 100, 0.8)",
+    borderRadius: 5,
+    alignItems: "center",
+    margin: 10,
+  },
+  text: { color: "black", fontSize: 16 },
 });

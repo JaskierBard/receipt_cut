@@ -85,13 +85,13 @@ const ParagonList = () => {
       <Text style={receiptStyles.seller_address}>{paragon.total}</Text>
       <View style={buttonStyles.container}>
         <TouchableOpacity
-          style={buttonStyles.touchable}
+          style={buttonStyles.touchable_dark}
           onPress={() => setSelectedParagon(null)}
         >
           <Text style={buttonStyles.text}>Wróć do listy</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={buttonStyles.touchable}
+          style={buttonStyles.touchable_dark}
           onPress={() => setSeparate(true)}
         >
           <Text style={buttonStyles.text}>Podziel</Text>
@@ -126,7 +126,7 @@ const ParagonList = () => {
             )}
           </>
         ) : (
-          <View>
+          <View >
             <TouchableOpacity
               // style={styles.dateSection}
               onPress={() => {
@@ -150,14 +150,14 @@ const ParagonList = () => {
                     setSelectedParagon(entry.receipt_details)
                   }}
                 >
-                  <Text style={receiptStyles.purchase_item}>
+                  <Text style={receiptStyles.purchase_item_text}>
                     {entry.receipt_details.seller_details.name} -{" "}
                     {entry.receipt_details.total} PLN
                   </Text>
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={receiptStyles.total}>Brak danych dla tej daty</Text>
+              <Text style={receiptStyles.purchase_item_text}>Brak dodanych paragonów tego dnia.</Text>
             )}
           </View>
         )}
@@ -175,16 +175,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "gold",
+    marginBottom: 10,
   },
-  // listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "gold" },
-  // listItemText: { fontSize: 16, color: "white" },
- 
-  // noDataText: {
-  //   fontSize: 16,
-  //   textAlign: "center",
-  //   marginTop: 20,
-  //   color: "white",
-  // },
 });
 
 export default ParagonList;
