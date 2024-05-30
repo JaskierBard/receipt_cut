@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   View,
   Text,
   ScrollView,
   Image,
-  Button,
   TouchableOpacity,
 } from "react-native";
 
@@ -17,9 +15,10 @@ import { receiptStyles } from "../styles/receipt";
 
 interface Props {
   list: any;
+  handleDelete: ()=> void;
 }
 
-export const ReceiptList = ({ list }: Props) => {
+export const ReceiptList = ({ list,  handleDelete}: Props) => {
   const [purchaseItems, setPurchaseItems] = useState(
     list.receipt_details.purchase_items
   );
@@ -38,7 +37,6 @@ export const ReceiptList = ({ list }: Props) => {
   };
 
   const handleCategoryChange = (index: number, category: string) => {
-    console.log(category, index, category)
     const updatedCategories = [...purchaseItems];
     updatedCategories[index].category = category;
     setPurchaseItems(updatedCategories);
@@ -82,7 +80,9 @@ export const ReceiptList = ({ list }: Props) => {
         <TouchableOpacity>
           <Image source={require("../assets/images/separate.png")} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity  onPress={() => {
+            handleDelete()
+          }}>
           <Image source={require("../assets/images/delete.png")} />
         </TouchableOpacity>
       </View>

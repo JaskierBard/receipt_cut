@@ -48,7 +48,9 @@ const HomeScreen = () => {
       }
     }
   };
-
+  const handleDelete = () => {
+    setList(null)
+  };
   const convert = async () => {
     setProcessing(true);
     const aiChat = new OpenAiChat(systemPrompt);
@@ -66,7 +68,7 @@ const HomeScreen = () => {
       <View style={mainStyles.container}>
         {list ? (
           <>
-            <ReceiptList list={list} />
+            <ReceiptList list={list} handleDelete={handleDelete}/>
           </>
         ) : (
           <View style={receiptStyles.container}>
