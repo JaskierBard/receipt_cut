@@ -30,9 +30,10 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
     setPurchaseItems(updatedItems);
   };
 
-  const handlePriceChange = (index: number, newPrice: string) => {
+  const handlePriceChange = (index: number, newPrice: string, discountType:string) => {
+    console.log(index, newPrice)
     const updatedItems = [...purchaseItems];
-    updatedItems[index].price_after_discount = newPrice === "" ? 0 : parseFloat(newPrice);
+    updatedItems[index][discountType] = newPrice === "" ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
   };
 

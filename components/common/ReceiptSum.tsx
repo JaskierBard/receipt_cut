@@ -7,8 +7,9 @@ interface Props {
   purchaseItems: PurchaseItem[];
   total?: any;
   notify: boolean;
+  type?: string;
 }
-export const ReceiptSum = ({ purchaseItems, total, notify }: Props) => {
+export const ReceiptSum = ({ purchaseItems, total, notify, type }: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
  useEffect(() => {
@@ -16,7 +17,9 @@ export const ReceiptSum = ({ purchaseItems, total, notify }: Props) => {
     try {
       const sum = purchaseItems.reduce((total: number, item: any) => {
         const itemPrice = item.discount_value ? item.price_after_discount : item.price_before_discount;
-        // console.log(total + itemPrice * (item.quantity || 0))
+        if (type === 'short') {
+            return total + (itemPrice * item.quantity);
+        }
         return total + itemPrice;
       }, 0);
       setTotalValue(parseFloat(sum.toFixed(2)));

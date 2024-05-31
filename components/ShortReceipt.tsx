@@ -27,11 +27,13 @@ const ShortReceipt = () => {
   };
 
   const handleItemChange = (index: number, key: string, value: string) => {
+    console.log(key)
     const newItems = [...purchaseItems];
-    if (key === "price" || key === "quantity") {
+    if ( key === "price_before_discount"  || key === "quantity") {
       newItems[index] = { ...newItems[index], [key]: Number(value) };
+      console.log(newItems)
     } else {
-      newItems[index] = { ...newItems[index], [key]: value };
+      newItems[index] = { ...newItems[index], [key]: (value) };
     }
     setPurchaseItems(newItems);
   };
@@ -50,6 +52,7 @@ const ShortReceipt = () => {
   };
 
   const handleSave = async () => {
+    sumPrices(purchaseItems)
     setLoader(true);
     const ans = await saveParagon(
       "1",
@@ -115,9 +118,9 @@ const ShortReceipt = () => {
                   <TextInput
                     style={styles.input_small}
                     placeholder="Cena"
-                    value={item.price_after_discount === 0 ? "" : String(item.price_after_discount)}
+                    value={ String(item.price_before_discount)}
                     onChangeText={(text) =>
-                      handleItemChange(index, "price", text)
+                      handleItemChange(index, (item.discount_value === 0 ? 'price_before_discount': 'price_after_discount'), text)
                     }
                     keyboardType="numeric"
                     placeholderTextColor="#888"
@@ -150,7 +153,7 @@ const ShortReceipt = () => {
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <ReceiptSum purchaseItems={purchaseItems} notify={false} />
+          <ReceiptSum purchaseItems={purchaseItems} notify={false} type="short"/>
           <TouchableOpacity
             style={buttonStyles.touchable}
             onPress={() => {

@@ -24,12 +24,7 @@ const Settings = ({ navigation }: any) => {
     >
       <View style={styles.container}>
         <View style={styles.modalContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              handleLogout;
-            }}
-          >
+          <TouchableOpacity style={styles.button} onPress={handleLogout}>
             <Text style={styles.buttonText}>Wyloguj</Text>
           </TouchableOpacity>
         </View>

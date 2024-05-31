@@ -9,7 +9,7 @@ interface Props {
   index: number;
   item: PurchaseItem;
   handleQuantityChange: (index: number, value: string) => void;
-  handlePriceChange: (index: number, value: string) => void;
+  handlePriceChange: (index: number, value: string, discountType:string) => void;
   handleCategoryChange: (index: number, value: string) => void;
 }
 export const ReceiptItem = (props: Props) => {
@@ -62,7 +62,7 @@ export const ReceiptItem = (props: Props) => {
             }
             keyboardType="numeric"
             onChangeText={(value) =>
-              props.handlePriceChange(props.index, value)
+              props.handlePriceChange(props.index, value, (props.item.discount_value == 0 ? 'price_before_discount': 'price_after_discount'))
             }
           />
         </View>
