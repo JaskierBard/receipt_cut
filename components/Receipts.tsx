@@ -1,161 +1,182 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView , StyleSheet} from 'react-native';
-import { getParagons } from '../src/firebaseChatService'; // Upewnij się, że ścieżka jest poprawna
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  ImageBackground,
+  Image,
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { getParagons } from "../src/firebaseChatService";
+import Separate from "./Separate";
+import { mainStyles } from "../styles/main";
+import { buttonStyles } from "../styles/buttons";
+import { receiptStyles } from "../styles/receipt";
+import { PurchaseItem, ReceiptDetails } from "../types/receipt";
+
+// export interface ParagonsData {
+//   [date: string]: ReceiptDetails[];
+// }
 
 
-interface Props {
 
-}
+const ParagonList = () => {
+  const [paragons, setParagons] = useState<ReceiptDetails | any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [separate, setSeparate] = useState<boolean>(false);
+  const [selectedParagon, setSelectedParagon] = useState<PurchaseItem[] | null>(
+    null
+  );
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
-interface ParagonsData {
-    [date: string]: ReceiptDetails[];
-  }
-  
-  interface ReceiptDetails {
-    description: string;
-    price: number;
-    quantity: string;
-    category: string;
-
-  }
-  const ParagonList = () => {
-    const [paragons, setParagons] = useState<ParagonsData | any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(null);
-  
-    useEffect(() => {
-      const fetchParagons = async () => {
-        try {
-          const data = await getParagons();
-          setParagons(data?.['2024-05-22']);
-        } catch (error) {
-          console.error("Błąd podczas pobierania paragonów: ", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchParagons();
-    }, []);
-  
-    if (loading) {
-      return <ActivityIndicator size="large" color="#0000ff" />;
+  const fetchParagons = async (date: string) => {
+    try {
+      setLoading(true);
+      const data = await getParagons();
+      setParagons(data?.[date]);
+    } catch (error) {
+      console.error("Błąd podczas pobierania paragonów: ", error);
+    } finally {
+      setLoading(false);
     }
-  
-    if (!paragons) {
-      return <Text style={styles.noDataText}>Brak paragonów do wyświetlenia.</Text>;
+  };
+
+  const onDateChange = (event: any, date?: Date) => {
+    setShowDatePicker(false);
+    if (date) {
+      setSelectedDate(date);
+      const formattedDate = date.toISOString().split("T")[0];
+      fetchParagons(formattedDate);
     }
-    
-    const renderParagonDetails = (paragon: any) => (
-        <>
-        
-          {paragon.map((entry: any, index: any) => (
-            <View key={index} style={styles.detailsContainer}>
-              <Text style={styles.detailText}>Nazwa: {entry.description}</Text>
-              <Text style={styles.detailText}>Kwota: {entry.price} PLN</Text>
-              <Text style={styles.detailText}>Ilość: {entry.quantity}</Text>
-              <Text style={styles.detailText}>Kategoria: {entry.category}</Text>
-            </View>
-          ))}
-          <TouchableOpacity style={styles.backButton} onPress={() => setSelectedParagon(null)}>
-            <Text style={styles.backButtonText}>Wróć do listy</Text>
-          </TouchableOpacity>
-        </>
-      );
-      
-    
-    return (
-      <ScrollView style={styles.container}>
+  };
+
+  const handleSeparate = () => {
+    setSeparate(false);
+  };
+
+  useEffect(() => {
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+    fetchParagons(formattedDate);
+  }, [selectedDate]);
+
+  const renderParagonDetails = (paragon: any) => (
+    <View style={receiptStyles.shop_list}>
+      <Text style={receiptStyles.seller_name}>{paragon.seller_details.name}</Text>
+      <Text style={receiptStyles.seller_address}>{paragon.seller_details.address}</Text>
+
+      <ScrollView style={{ height: "92%" }}>
+        {paragon.purchase_items.map((entry: any, index: any) => (
+          <View key={index} style={receiptStyles.purchase_item}>
+            <Text style={receiptStyles.item_description}>{entry.description}</Text>
+            <Text style={receiptStyles.detail_text}>Kwota: {
+              entry.discount_value === 0
+                ? String(entry.price_before_discount)
+                : String(entry.price_after_discount)
+            } PLN</Text>
+            <Text style={receiptStyles.detail_text}>Ilość: {entry.quantity}</Text>
+            <Text style={receiptStyles.detail_text}>Kategoria: {entry.category}</Text>
+          </View>
+        ))}
+      </ScrollView>
+      <Text style={receiptStyles.seller_address}>{paragon.total}</Text>
+      <View style={buttonStyles.container}>
+        <TouchableOpacity
+          style={buttonStyles.touchable_dark}
+          onPress={() => setSelectedParagon(null)}
+        >
+          <Text style={buttonStyles.text}>Wróć do listy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={buttonStyles.touchable_dark}
+          onPress={() => setSeparate(true)}
+        >
+          <Text style={buttonStyles.text}>Podziel</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <ImageBackground
+      source={require("../assets/recent.jpeg")}
+      style={mainStyles.background}
+    >
+      {showDatePicker && (
+        <DateTimePicker
+          value={selectedDate}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
+      <View style={mainStyles.container}>
         {selectedParagon ? (
-          renderParagonDetails(selectedParagon)
+          <>
+            {separate ? (
+              <Separate
+                paragonsData={selectedParagon}
+                handleSeparate={handleSeparate}
+              />
+            ) : (
+              renderParagonDetails(selectedParagon)
+            )}
+          </>
         ) : (
-          <View style={styles.dateSection}>
-            <Text style={styles.dateText}>2024-05-22</Text>
-            {Array.isArray(paragons) ? (
+          <View >
+            <TouchableOpacity
+              // style={styles.dateSection}
+              onPress={() => {
+                setShowDatePicker(true);
+                setSelectedParagon(null);
+              }}
+            >
+              <Text style={styles.dateText}>
+                {selectedDate.toISOString().split("T")[0]}
+              </Text>
+            </TouchableOpacity>
+
+            {loading ? (
+              <ActivityIndicator size="large" color="gold" />
+            ) : Array.isArray(paragons) ? (
               paragons.map((entry, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.listItem}
-                  onPress={() => setSelectedParagon(entry.receipt_details.purchase_items)}
+                  style={receiptStyles.purchase_item}
+                  onPress={() => {
+                    setSelectedParagon(entry.receipt_details)
+                  }}
                 >
-                  <Text style={styles.listItemText}>{entry.receipt_details.seller_details.name} - {entry.receipt_details.total} PLN</Text>
+                  <Text style={receiptStyles.purchase_item_text}>
+                    {entry.receipt_details.seller_details.name} -{" "}
+                    {entry.receipt_details.total} PLN
+                  </Text>
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={styles.noDataText}>Brak danych dla tej daty</Text>
+              <Text style={receiptStyles.purchase_item_text}>Brak dodanych paragonów tego dnia.</Text>
             )}
           </View>
         )}
-      </ScrollView>
-    );
-  };
-    
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#f9f9f9',
-      },
-      loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      noDataText: {
-        textAlign: 'center',
-        marginTop: 20,
-        fontSize: 16,
-        color: '#999',
-      },
-      dateSection: {
-        marginBottom: 16,
-      },
-      dateText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 8,
-      },
-      listItem: {
-        padding: 10,
-        backgroundColor: '#fff',
-        marginBottom: 8,
-        borderRadius: 5,
-        borderColor: '#ddd',
-        borderWidth: 1,
-      },
-      listItemText: {
-        fontSize: 16,
-        color: '#333',
-      },
-      detailsContainer: {
-        padding: 16,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        borderColor: '#ddd',
-        borderWidth: 1,
-      },
-      detailsHeader: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      detailText: {
-        fontSize: 16,
-        marginBottom: 8,
-        color: '#555',
-      },
-      backButton: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: '#007BFF',
-        borderRadius: 5,
-        alignItems: 'center',
-      },
-      backButtonText: {
-        color: '#fff',
-        fontSize: 16,
-      },
-    });
-    
-    export default ParagonList;
+      </View>
+    </ImageBackground>
+  );
+};
+
+const styles = StyleSheet.create({
+  dateText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "gold",
+    marginBottom: 10,
+  },
+});
+
+export default ParagonList;

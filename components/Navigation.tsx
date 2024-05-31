@@ -1,10 +1,10 @@
-// TabNavigator.tsx
-
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, StyleSheet } from "react-native";
 import Receipts from "./Receipts";
 import HomeScreen from "./HomeScreen";
+import Settings from "./Settings";
+import ShortReceipt from "./ShortReceipt";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +26,8 @@ const TabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="missions"
-        component={HomeScreen} // Zastąp Receipts odpowiednim komponentem
+        name="scan"
+        component={HomeScreen}
 
         options={{
           title: "Skanuj paragon",
@@ -37,13 +37,30 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
       <Tab.Screen
-        name="npc"
-        component={Receipts} // Zastąp Receipts odpowiednim komponentem
+        name="short"
+        component={ShortReceipt}
+        options={{
+          title: "Dodaj paragon",
+          tabBarIcon: () => (
+            <Image
+              source={require("../assets/images/receipt.png")}
+              style={styles.backgroundImage}
+            />
+          ),
+          headerShown: false,
 
+        }}
+      >
+      </Tab.Screen>
+      <Tab.Screen
+        name="receipts"
+        component={Receipts}
         options={{
           title: "Wcześniejsze paragony",
           tabBarIcon: () => (
@@ -52,12 +69,14 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
       <Tab.Screen
         name="settings"
-        component={Receipts} // Zastąp Receipts odpowiednim komponentem
+        component={Settings}
 
         options={{
           title: "Ustawienia",
@@ -67,6 +86,8 @@ const TabNavigator = () => {
               style={styles.backgroundImage}
             />
           ),
+          headerShown: false,
+
         }}
       >
       </Tab.Screen>
@@ -78,7 +99,7 @@ export default TabNavigator;
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: 40,
+    width: 30,
+    height: 30,
   },
 });

@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet, Modal, ImageBackground } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Modal,Text, ImageBackground } from 'react-native';
 
-const FullScreenLoader: React.FC = () => (
+interface Props {
+  text: string
+}
+
+const FullScreenLoader = ({text}:Props) => (
     <ImageBackground
     source={require("../../assets/background.jpeg")}
     style={styles.background}
@@ -9,6 +13,7 @@ const FullScreenLoader: React.FC = () => (
   <Modal transparent={true} animationType="none" visible={true}>
     <View style={styles.container}>
       <ActivityIndicator size="large" color="gold" />
+      <Text style={styles.text}>{text}</Text>
     </View>
   </Modal>
   </ImageBackground>
@@ -26,6 +31,11 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
+  text: {
+    marginTop: 10,
+    color: 'white',
+    fontSize: 20
+  }
 });
 
 export default FullScreenLoader;
