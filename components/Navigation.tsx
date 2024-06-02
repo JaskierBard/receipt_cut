@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, StyleSheet } from "react-native";
 import Receipts from "./Receipts";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./paragonScan/ScanScreen";
 import Settings from "./Settings";
 import ShortReceipt from "./ShortReceipt";
 

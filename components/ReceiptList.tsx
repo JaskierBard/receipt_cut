@@ -6,7 +6,6 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-
 import { saveParagon } from "../src/firebaseChatService";
 import { ReceiptItem } from "./common/ReceiptItem";
 import { ReceiptSum } from "./common/ReceiptSum";
@@ -22,7 +21,6 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
   const [purchaseItems, setPurchaseItems] = useState(
     list.receipt_details.purchase_items
   );
-// console.log(list.receipt_details.purchase_items)
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
     updatedItems[index].quantity =
