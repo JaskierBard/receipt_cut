@@ -8,17 +8,26 @@ interface Props {
   total?: any;
   notify: boolean;
   type?: string;
+  finishEdit: () => void;
 }
-export const ReceiptSum = ({ purchaseItems, total, notify, type }: Props) => {
+export const ReceiptSum = ({
+  purchaseItems,
+  total,
+  notify,
+  type,
+  finishEdit,
+}: Props) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
- useEffect(() => {
+  useEffect(() => {
     console.log(purchaseItems);
     try {
       const sum = purchaseItems.reduce((total: number, item: any) => {
-        const itemPrice = item.discount_value ? item.price_after_discount : item.price_before_discount;
-        if (type === 'short') {
-            return total + (itemPrice * item.quantity);
+        const itemPrice = item.discount_value
+          ? item.price_after_discount
+          : item.price_before_discount;
+        if (type === "short") {
+          return total + itemPrice * item.quantity;
         }
         return total + itemPrice;
       }, 0);
@@ -28,10 +37,16 @@ export const ReceiptSum = ({ purchaseItems, total, notify, type }: Props) => {
     }
   }, [purchaseItems]);
 
+  useEffect(() => {
+    if (total === totalValue) {
+      finishEdit();
+    }
+  }, [totalValue]);
+
   return (
     <>
       {total ? (
-        <>
+        <View style={{backgroundColor: 'lightgray',width: '100%',flexDirection:'row', display: 'flex'}}>
           <Text
             style={[
               styles.total,
@@ -42,10 +57,12 @@ export const ReceiptSum = ({ purchaseItems, total, notify, type }: Props) => {
           >
             Suma: {total.toFixed(2)} PLN
           </Text>
-          <Text style={styles.total}>
-            ({(totalValue - total).toFixed(2)} PLN)
-          </Text>
-        </>
+          {total !== totalValue && (
+            <Text style={styles.total}>
+              ({(totalValue - total).toFixed(2)} PLN)
+            </Text>
+          )}
+        </View>
       ) : (
         <View style={styles.sum_container_small}>
           <Text style={styles.total_small}>({totalValue} PLN)</Text>

@@ -7,9 +7,11 @@ export const receiptStyles = StyleSheet.create({
     maxHeight: "65%",
     display: "flex",
   },
-
+  logo: {
+    width: "100%",
+    height: "10%",
+  },
  
-  detail_text: { fontSize: 16 },
 
   shop_list: {
     width: "90%",
