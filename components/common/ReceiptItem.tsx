@@ -25,12 +25,13 @@ export const ReceiptItem = (props: Props) => {
     const result2 = (
       props.item.price_before_discount - props.item.discount_value
     ).toFixed(2);
+
     if (
       props.item.price_before_discount - Number(result1) === 0 &&
       props.item.discount_value === 0
     ) {
       setCorrect(true);
-    } else if (props.item.price_after_discount === Number(result2)) {
+    } else if (props.item.price_after_discount === Number(result2) && props.item.price_after_discount> props.item.price_before_discount) {
       setCorrect(true);
     } else false;
   }, []);
@@ -59,35 +60,43 @@ export const ReceiptItem = (props: Props) => {
             initValueTextStyle={{ color: "black", fontSize: 15 }}
             selectTextStyle={{ color: "black", fontSize: 15 }}
           >
-            <Text style={{ color: "black", padding: 0, fontSize: 15 }}>
+            <Text style={receiptStyles.text}>
               {props.item.category}
             </Text>
           </ModalSelector>
         </View>
         <View style={{ flexDirection: "row" }}>
-        {!correct ? 
-
-          <TextInput
-            style={receiptStyles.item_input}
-            value={props.item.quantity === 0 ? "" : String(props.item.quantity)}
-            keyboardType="numeric"
-            onChangeText={(value) =>
-              props.handleQuantityChange(props.index, value)
-            }
-          /> : <Text>{props.item.quantity}</Text>}
-          <Text>{props.item.unit}</Text>
+          {!correct ? (
+            <TextInput
+              style={receiptStyles.item_input}
+              value={
+                props.item.quantity === 0 ? "" : String(props.item.quantity)
+              }
+              keyboardType="numeric"
+              onChangeText={(value) =>
+                props.handleQuantityChange(props.index, value)
+              }
+            />
+          ) : (
+            <Text style={receiptStyles.text}>{props.item.quantity}</Text>
+          )}
+          <View style={{display:'flex', flexDirection: 'row'}}>
+          <Text style={receiptStyles.text}>{props.item.unit} </Text>
+          <Text style={receiptStyles.text}>
+            { props.item.unit_price +" szt" }
+          </Text>
+          </View>
+          
         </View>
 
         <View style={receiptStyles.price}>
-          <Text style={{ textAlign: "center" }}>
-            {"za szt" + props.item.unit_price}PLN
-          </Text>
+          
           {props.item.discount_value > 0 && (
             <View>
-              <Text style={{ textAlign: "center" }}>
+              <Text style={receiptStyles.text}>
                 {props.item.price_before_discount}PLN
               </Text>
-              <Text style={{ textAlign: "center" }}>
+              <Text style={receiptStyles.text}>
                 -{props.item.discount_value} PLN
               </Text>
             </View>

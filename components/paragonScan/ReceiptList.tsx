@@ -52,7 +52,7 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
     <View style={receiptStyles.shop_list}>
       <View style={receiptStyles.logo}>
         <Image
-          style={{ width:'100%', maxWidth:'100%', maxHeight:'100%' }}
+          style={{ width: "100%", maxWidth: "100%", maxHeight: "100%" }}
           source={require("../../assets/logos/biedronka.png")}
           resizeMode="contain"
         />
@@ -61,20 +61,23 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
       {/* <Text style={receiptStyles.seller_address}>
         {list.seller_details.address}
       </Text> */}
-      <ScrollView style={receiptStyles.container}>
-        {purchaseItems &&
-          purchaseItems.map((item: any, index: number) => (
-            <View key={index}>
-              <ReceiptItem
-                index={index}
-                item={item}
-                handleQuantityChange={handleQuantityChange}
-                handlePriceChange={handlePriceChange}
-                handleCategoryChange={handleCategoryChange}
-              />
-            </View>
-          ))}
-      </ScrollView>
+      <View style={receiptStyles.receipt}>
+        <ScrollView style={receiptStyles.container}>
+          {purchaseItems &&
+            purchaseItems.map((item: any, index: number) => (
+              <View key={index}>
+                <ReceiptItem
+                  index={index}
+                  item={item}
+                  handleQuantityChange={handleQuantityChange}
+                  handlePriceChange={handlePriceChange}
+                  handleCategoryChange={handleCategoryChange}
+                />
+              </View>
+            ))}
+        </ScrollView>
+      </View>
+
       <ReceiptSum
         purchaseItems={purchaseItems}
         total={list.total}

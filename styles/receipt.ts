@@ -3,48 +3,64 @@ import { StyleSheet } from "react-native";
 export const receiptStyles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "80%",
-    maxHeight: "65%",
-    display: "flex",
+    // height: "100%",
+    // maxHeight: "65%",
+    // display: "flex",
   },
   logo: {
+    // backgroundColor: 'red',
     width: "100%",
     height: "10%",
+    marginBottom: 10,
+  },
+
+  receipt: {
+        maxHeight: "72%",
+
+    borderWidth: 1,
+    borderColor: "red",
   },
  
+text:{
+  fontFamily: "monospace",
 
+},
   shop_list: {
     width: "90%",
     margin: "5%",
-    maxHeight: "95%",
-    backgroundColor: "white",
+    // maxHeight: "95%",
+    backgroundColor: "yellow",
     padding: 10,
-    borderWidth: 1,
-    borderColor: "#000000",
+    borderWidth: 2,
+    borderColor: "red",
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
     elevation: 1,
   },
   purchase_item: {
-    borderBottomWidth: 2,
-    borderColor: "darkgrey",
-    marginBottom: 10,
-    paddingBottom: 10,
-    display: "flex",
+    backgroundColor: 'white',
+    // borderLeftWidth: 1,
+    borderBottomWidth: 1,
+    
+    borderColor: "red",
+    // marginBottom: 2,
+    // paddingBottom: 10,
+    // display: "flex",
   },
-  purchase_item_text: {
-    color: "white",
-  },
+ 
   details: {
     marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+
   },
   name: {
     fontWeight: "bold",
+    fontFamily: "monospace",
+
     marginBottom: 5,
   },
   item_input: {
@@ -67,6 +83,7 @@ export const receiptStyles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     marginTop: 10,
+    
   },
   price: {
     // backgroundColor: 'red',
@@ -79,6 +96,7 @@ export const receiptStyles = StyleSheet.create({
     textAlign: "center",
     marginTop: 5,
     fontSize: 18,
+
   },
   seller_address: {
     textAlign: "center",
