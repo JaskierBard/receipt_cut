@@ -41,7 +41,7 @@ export const receiptStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  item_description: {
+  name: {
     fontWeight: "bold",
     marginBottom: 5,
   },

@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { View, ImageBackground, Image } from "react-native";
 import { buttonStyles } from "../../styles/buttons";
 import { OpenAiChat } from "../../src/chatAI";
-import { ReceiptList } from "../ReceiptList";
+import { ReceiptList } from "./ReceiptList";
 import { systemPrompt, prompt } from "../../utils/data";
 import ProcessingLoader from "../common/ProcessingLoader";
 import { mainStyles } from "../../styles/main";
-import { receiptStyles } from "../../styles/receipt";
 import { takePicture } from "../../utils/takePicture";
 import { base64Photo } from "../../types/base64photo";
 import { SimpleButton } from "../common/SimpleButton";
 import { imageStyles } from "../../styles/image";
+import { ReceiptDetails } from "../../types/receipt";
 
 const ScanScreen = () => {
   const [image, setImage] = useState<base64Photo>();
-  const [list, setList] = useState<any>(null);
+  const [list, setList] = useState<{receipt_details: ReceiptDetails} | null>(null);
   const [processing, setProcessing] = useState<boolean>(false);
 
   const handlePicture = async () => {
@@ -40,7 +40,7 @@ const ScanScreen = () => {
     >
       <View style={mainStyles.container}>
         {list ? (
-          <ReceiptList list={list} handleDelete={handleDelete} />
+          <ReceiptList list={list.receipt_details} handleDelete={handleDelete} />
         ) : (
           <View >
             {!processing ? (

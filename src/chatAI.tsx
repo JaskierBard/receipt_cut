@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { API_KEY } from "./aiConfig";
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions";
+import { ReceiptDetails } from "../types/receipt";
 
 const parameters: ChatCompletionCreateParamsBase = {
   n: 1,
@@ -28,11 +29,8 @@ export class OpenAiChat {
     ];
   }
 
-  async say(prompt: string, url: any): Promise<string | null> {
-        console.log('start 1');
-
+  async say(prompt: string, url: any): Promise<{receipt_details: ReceiptDetails} | null> {
     const imageUrl = `data:image/jpeg;base64,${url}`;
-    console.log('start 2');
     const response = await this.openai.chat.completions.create({
       model: "gpt-4o",
       response_format: { type: "json_object" },
@@ -51,15 +49,13 @@ export class OpenAiChat {
         },
       ],
     });
-    console.log('start 3');
 
     const answer = response.choices[0].message.content;
     if (answer !== null) {
       console.log(answer ? JSON.parse(answer) : "zły format");
-
       return answer ? JSON.parse(answer) : "zły format";
     } else {
-      return "błąd";
+      return null;
     }
   }
 }

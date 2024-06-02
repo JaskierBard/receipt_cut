@@ -6,20 +6,21 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { saveParagon } from "../src/firebaseChatService";
-import { ReceiptItem } from "./common/ReceiptItem";
-import { ReceiptSum } from "./common/ReceiptSum";
-import { buttonStyles } from "../styles/buttons";
-import { receiptStyles } from "../styles/receipt";
+import { saveParagon } from "../../src/firebaseChatService";
+import { ReceiptItem } from "../common/ReceiptItem";
+import { ReceiptSum } from "../common/ReceiptSum";
+import { buttonStyles } from "../../styles/buttons";
+import { receiptStyles } from "../../styles/receipt";
+import { DiscountType, PurchaseItem, ReceiptDetails } from "../../types/receipt";
 
 interface Props {
-  list: any;
+  list: ReceiptDetails;
   handleDelete: ()=> void;
 }
 
 export const ReceiptList = ({ list,  handleDelete}: Props) => {
-  const [purchaseItems, setPurchaseItems] = useState(
-    list.receipt_details.purchase_items
+  const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>(
+    list.purchase_items
   );
   const handleQuantityChange = (index: number, newQuantity: string) => {
     const updatedItems = [...purchaseItems];
@@ -28,8 +29,7 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
     setPurchaseItems(updatedItems);
   };
 
-  const handlePriceChange = (index: number, newPrice: string, discountType:string) => {
-    console.log(index, newPrice)
+  const handlePriceChange = (index: number, newPrice: string, discountType:DiscountType) => {
     const updatedItems = [...purchaseItems];
     updatedItems[index][discountType] = newPrice === "" ? 0 : parseFloat(newPrice);
     setPurchaseItems(updatedItems);
@@ -44,10 +44,10 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
   return (
     <View style={receiptStyles.shop_list}>
       <Text style={receiptStyles.seller_name}>
-        {list.receipt_details.seller_details.name}
+        {list.seller_details.name}
       </Text>
       <Text style={receiptStyles.seller_address}>
-        {list.receipt_details.seller_details.address}
+        {list.seller_details.address}
       </Text>
       <ScrollView style={receiptStyles.container}>
         {purchaseItems &&
@@ -65,7 +65,7 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
       </ScrollView>
       <ReceiptSum
         purchaseItems={purchaseItems}
-        total={list.receipt_details.total}
+        total={list.total}
         notify={false}
       />
       <View style={buttonStyles.container}>
@@ -74,15 +74,15 @@ export const ReceiptList = ({ list,  handleDelete}: Props) => {
             saveParagon("1", list, "recipes");
           }}
         >
-          <Image source={require("../assets/images/save.png")} />
+          <Image source={require("../../assets/images/save.png")} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require("../assets/images/separate.png")} />
+          <Image source={require("../../assets/images/separate.png")} />
         </TouchableOpacity>
         <TouchableOpacity  onPress={() => {
             handleDelete()
           }}>
-          <Image source={require("../assets/images/delete.png")} />
+          <Image source={require("../../assets/images/delete.png")} />
         </TouchableOpacity>
       </View>
     </View>
