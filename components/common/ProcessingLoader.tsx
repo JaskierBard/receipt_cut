@@ -6,8 +6,11 @@ import {
   ImageBackground,
   Text,
 } from "react-native";
+interface Props {
+  processingTime:number
+}
 
-const ProcessingLoader: React.FC = () => (
+const ProcessingLoader = ({processingTime}:Props) => (
   <View style={styles.container}>
     <ImageBackground
       source={require("../../assets/processing.jpeg")}
@@ -16,6 +19,7 @@ const ProcessingLoader: React.FC = () => (
       <ActivityIndicator size={100} color="gold" style={styles.spinner} />
       <View style={styles.funny}>
         <Text style={styles.text}>Trwa przepisywanie...</Text>
+        <Text style={styles.text}>{processingTime}</Text>
       </View>
     </ImageBackground>
   </View>

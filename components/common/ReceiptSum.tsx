@@ -20,15 +20,14 @@ export const ReceiptSum = ({
   const [totalValue, setTotalValue] = useState<number>(0);
 
   useEffect(() => {
-    console.log(purchaseItems);
     try {
       const sum = purchaseItems.reduce((total: number, item: any) => {
         const itemPrice = item.discount_value
           ? item.price_after_discount
           : item.price_before_discount;
-        if (type === "short") {
+        // if (type === "short") {
           return total + itemPrice * item.quantity;
-        }
+        // }
         return total + itemPrice;
       }, 0);
       setTotalValue(parseFloat(sum.toFixed(2)));
