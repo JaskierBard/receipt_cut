@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
+  Image,
   StyleSheet,
   ScrollView,
   ImageBackground,
@@ -14,10 +14,18 @@ import { ReceiptSum } from "../components/common/ReceiptSum";
 import { saveParagon } from "../src/firebaseChatService";
 import { sumPrices } from "../utils/sumPrices";
 import Loader from "../components/common/Loaders/Loader";
-import { PurchaseItem } from "../types/receipt";
+import { DiscountType, PurchaseItem } from "../types/receipt";
+import ModalSelector from "react-native-modal-selector";
+import { shops } from "../utils/data";
+import { colors, dynamicStyles } from "../styles/shop";
+import { ReceiptItem } from "../components/common/ReceiptItem";
+import { receiptStyles } from "../styles/receipt";
 
 const ShortReceipt = () => {
   const [loader, setLoader] = useState<boolean>(false);
+  const [shopName, setShopName] = useState<string>("default");
+  const [shopDynamicStyles, setShopDynamicStyles] = useState<any>();
+
   const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
   const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([
     {
@@ -31,21 +39,25 @@ const ShortReceipt = () => {
       unit_price: 0,
     },
   ]);
-  const handleSellerChange = (key: string, value: string) => {
-    setSellerDetails({ ...sellerDetails, [key]: value });
-  };
+  useEffect(() => {
+    setShopDynamicStyles(dynamicStyles(shopName as any));
+  }, [shopName]);
 
-  const handleItemChange = (index: number, key: string, value: string) => {
-    console.log(key);
-    const newItems = [...purchaseItems];
-    if (key === "price_before_discount" || key === "quantity") {
-      newItems[index] = { ...newItems[index], [key]: Number(value) };
-      console.log(newItems);
-    } else {
-      newItems[index] = { ...newItems[index], [key]: value };
-    }
-    setPurchaseItems(newItems);
-  };
+  // const handleSellerChange = (key: string, value: string) => {
+  //   setSellerDetails({ ...sellerDetails, [key]: value });
+  // };
+
+  // const handleItemChange = (index: number, key: string, value: string) => {
+  //   console.log(key);
+  //   const newItems = [...purchaseItems];
+  //   if (key === "price_before_discount" || key === "quantity") {
+  //     newItems[index] = { ...newItems[index], [key]: Number(value) };
+  //     console.log(newItems);
+  //   } else {
+  //     newItems[index] = { ...newItems[index], [key]: value };
+  //   }
+  //   setPurchaseItems(newItems);
+  // };
 
   const addItem = () => {
     setPurchaseItems([
@@ -58,7 +70,7 @@ const ShortReceipt = () => {
         unit: "",
         quantity: 1,
         category: "",
-        unit_price: 0
+        unit_price: 0,
       },
     ]);
   };
@@ -94,7 +106,7 @@ const ShortReceipt = () => {
           unit: "",
           quantity: 1,
           category: "",
-          unit_price: 0
+          unit_price: 0,
         },
       ]);
       setSellerDetails({ name: "", address: "" });
@@ -103,6 +115,32 @@ const ShortReceipt = () => {
       setLoader(false);
     }
   };
+
+  //
+  const handleQuantityChange = (index: number, newQuantity: string) => {
+    const updatedItems = [...purchaseItems];
+    updatedItems[index].quantity =
+      newQuantity === "" ? 0 : parseInt(newQuantity);
+    setPurchaseItems(updatedItems);
+  };
+
+  const handlePriceChange = (
+    index: number,
+    newPrice: string,
+    discountType: DiscountType
+  ) => {
+    const updatedItems = [...purchaseItems];
+    updatedItems[index][discountType] =
+      newPrice === "" ? 0 : parseFloat(newPrice);
+    setPurchaseItems(updatedItems);
+  };
+
+  const handleCategoryChange = (index: number, category: string) => {
+    const updatedCategories = [...purchaseItems];
+    updatedCategories[index].category = category;
+    setPurchaseItems(updatedCategories);
+  };
+  //
 
   return (
     <ImageBackground
@@ -115,91 +153,128 @@ const ShortReceipt = () => {
         </View>
       ) : (
         <View style={mainStyles.container}>
-          <TextInput
-            style={styles.inputBig}
-            placeholder="Nazwa sklepu"
-            value={sellerDetails.name}
-            onChangeText={(text) => handleSellerChange("name", text)}
-            placeholderTextColor="#888"
-          />
-          <TextInput
+          <View style={shopDynamicStyles && shopDynamicStyles.shop_list}>
+            <View style={{ flexDirection: "row" }}>
+              <ModalSelector
+                data={shops.map((shop: string, index: number) => ({
+                  key: index,
+                  label: shop,
+                }))}
+                initValue={shopName}
+                onChange={(option: any) =>
+                  // console.log(option)
+                  setShopName(option.label)
+                }
+                style={{
+                  height: 20,
+                  width: 90,
+                  padding: 0,
+                  margin: 0,
+                  justifyContent: "center",
+                }}
+                initValueTextStyle={{ color: "white", fontSize: 15 }}
+                selectTextStyle={{ color: "white", fontSize: 15 }}
+              ></ModalSelector>
+            </View>
+            {/* <TextInput
             style={styles.inputBig}
             placeholder="Adres"
             value={sellerDetails.address}
             onChangeText={(text) => handleSellerChange("address", text)}
             placeholderTextColor="#888"
-          />
-          <ScrollView style={styles.container}>
-            {purchaseItems.map((item, index) => (
-              <View key={index} style={styles.itemContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Produkt"
-                  value={item.item_name}
-                  onChangeText={(text) =>
-                    handleItemChange(index, "description", text)
-                  }
-                  placeholderTextColor="#888"
+          /> */}
+            <View style={receiptStyles.logo}>
+              {shopName !== "default" && (
+                <Image
+                  style={{ width: "100%", maxWidth: "100%", maxHeight: "100%" }}
+                  source={require('../assets/logos/dealz.png')}
+                  resizeMode="contain"
                 />
-                <View key={index} style={styles.input_container}>
-                  <TextInput
-                    style={styles.input_small}
-                    placeholder="Cena"
-                    value={String(item.price_before_discount)}
-                    onChangeText={(text) =>
-                      handleItemChange(
-                        index,
-                        item.discount_value === 0
-                          ? "price_before_discount"
-                          : "price_after_discount",
-                        text
-                      )
-                    }
-                    keyboardType="numeric"
-                    placeholderTextColor="#888"
-                  />
-                  <TextInput
-                    style={styles.input_small}
-                    placeholder="Ilość"
-                    value={item.quantity === 0 ? "" : String(item.quantity)}
-                    onChangeText={(text) =>
-                      handleItemChange(index, "quantity", text)
-                    }
-                    keyboardType="numeric"
-                    placeholderTextColor="#888"
+              )}
+            </View>
+            <ScrollView style={shopDynamicStyles && shopDynamicStyles.receipt}>
+              {purchaseItems.map((item, index) => (
+                <View key={index}>
+                  <ReceiptItem
+                    index={index}
+                    item={item}
+                    handleQuantityChange={handleQuantityChange}
+                    handlePriceChange={handlePriceChange}
+                    handleCategoryChange={handleCategoryChange}
                   />
                 </View>
+                // <View key={index} style={shopDynamicStyles.purchase_item}>
+                //   <TextInput
+                //     style={styles.input}
+                //     placeholder="Produkt"
+                //     value={item.item_name}
+                //     onChangeText={(text) =>
+                //       handleItemChange(index, "description", text)
+                //     }
+                //     placeholderTextColor="#888"
+                //   />
+                //   <View key={index} style={styles.input_container}>
+                //     <TextInput
+                //       style={styles.input_small}
+                //       placeholder="Cena"
+                //       value={String(item.price_before_discount)}
+                //       onChangeText={(text) =>
+                //         handleItemChange(
+                //           index,
+                //           item.discount_value === 0
+                //             ? "price_before_discount"
+                //             : "price_after_discount",
+                //           text
+                //         )
+                //       }
+                //       keyboardType="numeric"
+                //       placeholderTextColor="#888"
+                //     />
+                //     <TextInput
+                //       style={styles.input_small}
+                //       placeholder="Ilość"
+                //       value={item.quantity === 0 ? "" : String(item.quantity)}
+                //       onChangeText={(text) =>
+                //         handleItemChange(index, "quantity", text)
+                //       }
+                //       keyboardType="numeric"
+                //       placeholderTextColor="#888"
+                //     />
+                //   </View>
+                // </View>
+              ))}
+              <View style={buttonStyles.container}>
+                <TouchableOpacity
+                  style={buttonStyles.touchable}
+                  onPress={addItem}
+                >
+                  <Text style={buttonStyles.text}>Dodaj produkt</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={buttonStyles.touchable_warning}
+                  onPress={removeItem}
+                >
+                  <Text style={buttonStyles.text}>Usuń produkt</Text>
+                </TouchableOpacity>
               </View>
-            ))}
-            <View style={buttonStyles.container}>
-              <TouchableOpacity
-                style={buttonStyles.touchable}
-                onPress={addItem}
-              >
-                <Text style={buttonStyles.text}>Dodaj produkt</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={buttonStyles.touchable_warning}
-                onPress={removeItem}
-              >
-                <Text style={buttonStyles.text}>Usuń produkt</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-          <ReceiptSum
+            </ScrollView>
+            <ReceiptSum
               purchaseItems={purchaseItems}
               notify={false}
-              type="short" finishEdit={function (): void {
+              type="short"
+              finishEdit={function (): void {
                 throw new Error("Function not implemented.");
-              } }          />
-          <TouchableOpacity
-            style={buttonStyles.touchable}
-            onPress={() => {
-              handleSave();
-            }}
-          >
-            <Text style={buttonStyles.text}>Zapisz paragon</Text>
-          </TouchableOpacity>
+              }}
+            />
+            <TouchableOpacity
+              style={buttonStyles.touchable}
+              onPress={() => {
+                handleSave();
+              }}
+            >
+              <Text style={buttonStyles.text}>Zapisz paragon</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ImageBackground>

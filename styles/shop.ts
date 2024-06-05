@@ -13,7 +13,11 @@ const base = {
   elevation: 1,
 };
 
-const colors = {
+export const colors = {
+  default: {
+    backgroundColor: "wheat",
+    borderColor: "green",
+  },
   biedronka: {
     backgroundColor: "rgb(253, 237, 20)",
     borderColor: "rgb(224, 33, 48)",

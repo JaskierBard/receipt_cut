@@ -31,9 +31,9 @@ export const ReceiptItem = (props: Props) => {
       props.item.price_before_discount - Number(result1) === 0 &&
       props.item.discount_value === 0
     ) {
-      setCorrect(true);
+      // setCorrect(true);
     } else if (props.item.price_after_discount === Number(result2) && props.item.price_after_discount> props.item.price_before_discount) {
-      setCorrect(true);
+      // setCorrect(true);
     } else false;
   }, []);
 
