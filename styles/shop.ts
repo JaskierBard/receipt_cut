@@ -5,7 +5,8 @@ const { width, height } = Dimensions.get("window");
 
 const base = {
   width: width * 0.9,
-  margin: width * 0.05,
+  height: height * 0.82,
+  // margin: width * 0.05,
   borderRadius: 10,
   padding: 10,
   borderWidth: 2,
@@ -23,17 +24,6 @@ const colors = {
   },
 };
 
-// export const shopStyles = StyleSheet.create({
-//   biedronka: {
-//     ...base,
-//     ...colors.biedronka
-//   },
-//   dealz: {
-//     ...base,
-//     ...colors.dealz
-//   }
-// });
-
 export const dynamicStyles = (shopName: keyof typeof colors) => {
   return {
     shop_list: {
@@ -47,7 +37,8 @@ export const dynamicStyles = (shopName: keyof typeof colors) => {
       borderColor: colors[shopName].borderColor,
     },
     receipt: {
-      maxHeight: height * 0.72, // 72% of the screen height
+      height: height * 0.6,
+      // maxHeight: height * 0.72,
       borderWidth: 1,
       borderColor: colors[shopName].borderColor,
     },

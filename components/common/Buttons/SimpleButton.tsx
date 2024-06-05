@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity } from "react-native";
-import { buttonStyles } from "../../styles/buttons";
+import { buttonStyles } from "../../../styles/buttons";
 
 export interface Props {
   text: string;

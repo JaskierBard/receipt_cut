@@ -3,11 +3,11 @@ import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./components/LoginScreen";
+import LoginScreen from "./screens/LoginScreen";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./src/firebaseConfig";
-import Loader from "./components/common/Loader";
-import TabNavigator from "./components/Navigation"; 
+import Loader from "./components/common/Loaders/Loader";
+import TabNavigator from "./navigation/Navigation";
 const Stack = createNativeStackNavigator();
 
 const App = () => {

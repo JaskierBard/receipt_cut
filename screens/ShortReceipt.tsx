@@ -10,30 +10,39 @@ import {
 } from "react-native";
 import { mainStyles } from "../styles/main";
 import { buttonStyles } from "../styles/buttons";
-import { ReceiptSum } from "./common/ReceiptSum";
+import { ReceiptSum } from "../components/common/ReceiptSum";
 import { saveParagon } from "../src/firebaseChatService";
 import { sumPrices } from "../utils/sumPrices";
-import Loader from "./common/Loader";
+import Loader from "../components/common/Loaders/Loader";
 import { PurchaseItem } from "../types/receipt";
 
 const ShortReceipt = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sellerDetails, setSellerDetails] = useState({ name: "", address: "" });
   const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([
-    { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
+    {
+      item_name: "",
+      price_after_discount: 0,
+      discount_value: 0,
+      price_before_discount: 0,
+      unit: "",
+      quantity: 1,
+      category: "",
+      unit_price: 0,
+    },
   ]);
   const handleSellerChange = (key: string, value: string) => {
     setSellerDetails({ ...sellerDetails, [key]: value });
   };
 
   const handleItemChange = (index: number, key: string, value: string) => {
-    console.log(key)
+    console.log(key);
     const newItems = [...purchaseItems];
-    if ( key === "price_before_discount"  || key === "quantity") {
+    if (key === "price_before_discount" || key === "quantity") {
       newItems[index] = { ...newItems[index], [key]: Number(value) };
-      console.log(newItems)
+      console.log(newItems);
     } else {
-      newItems[index] = { ...newItems[index], [key]: (value) };
+      newItems[index] = { ...newItems[index], [key]: value };
     }
     setPurchaseItems(newItems);
   };
@@ -41,7 +50,16 @@ const ShortReceipt = () => {
   const addItem = () => {
     setPurchaseItems([
       ...purchaseItems,
-      { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
+      {
+        item_name: "",
+        price_after_discount: 0,
+        discount_value: 0,
+        price_before_discount: 0,
+        unit: "",
+        quantity: 1,
+        category: "",
+        unit_price: 0
+      },
     ]);
   };
 
@@ -52,7 +70,7 @@ const ShortReceipt = () => {
   };
 
   const handleSave = async () => {
-    sumPrices(purchaseItems)
+    sumPrices(purchaseItems);
     setLoader(true);
     const ans = await saveParagon(
       "1",
@@ -68,7 +86,16 @@ const ShortReceipt = () => {
 
     if (ans) {
       setPurchaseItems([
-        { description: "", price_after_discount: 0, discount_value:0, price_before_discount:0, unit: "", quantity: 1, category: "" },
+        {
+          item_name: "",
+          price_after_discount: 0,
+          discount_value: 0,
+          price_before_discount: 0,
+          unit: "",
+          quantity: 1,
+          category: "",
+          unit_price: 0
+        },
       ]);
       setSellerDetails({ name: "", address: "" });
       setLoader(false);
@@ -108,7 +135,7 @@ const ShortReceipt = () => {
                 <TextInput
                   style={styles.input}
                   placeholder="Produkt"
-                  value={item.description}
+                  value={item.item_name}
                   onChangeText={(text) =>
                     handleItemChange(index, "description", text)
                   }
@@ -118,9 +145,15 @@ const ShortReceipt = () => {
                   <TextInput
                     style={styles.input_small}
                     placeholder="Cena"
-                    value={ String(item.price_before_discount)}
+                    value={String(item.price_before_discount)}
                     onChangeText={(text) =>
-                      handleItemChange(index, (item.discount_value === 0 ? 'price_before_discount': 'price_after_discount'), text)
+                      handleItemChange(
+                        index,
+                        item.discount_value === 0
+                          ? "price_before_discount"
+                          : "price_after_discount",
+                        text
+                      )
                     }
                     keyboardType="numeric"
                     placeholderTextColor="#888"
@@ -153,7 +186,12 @@ const ShortReceipt = () => {
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <ReceiptSum purchaseItems={purchaseItems} notify={false} type="short"/>
+          <ReceiptSum
+              purchaseItems={purchaseItems}
+              notify={false}
+              type="short" finishEdit={function (): void {
+                throw new Error("Function not implemented.");
+              } }          />
           <TouchableOpacity
             style={buttonStyles.touchable}
             onPress={() => {

@@ -88,7 +88,7 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
         notify={false}
         finishEdit={finishEdit}
       />
-      <View style={buttonStyles.container}>
+      {/* <View style={buttonStyles.container}>
         {finished && (
           <>
             <TouchableOpacity
@@ -110,7 +110,7 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
         >
           <Image source={require("../../assets/images/delete.png")} />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

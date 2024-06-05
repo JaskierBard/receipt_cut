@@ -45,7 +45,7 @@ export const ReceiptSum = ({
   return (
     <>
       {total ? (
-        <View style={{backgroundColor: 'lightgray',width: '100%',flexDirection:'row', display: 'flex'}}>
+        <View style={styles.sum_container}>
           <Text
             style={[
               styles.total,
@@ -86,17 +86,16 @@ export const ReceiptSum = ({
 const styles = StyleSheet.create({
   sum_container: {
     display: "flex",
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderColor: "black",
-    backgroundColor: "red",
+    // flexDirection: "row",
+    // borderTopWidth: 1,
+    // borderColor: "black",
+    backgroundColor: "white",
   },
   total: {
     fontSize: 20,
     textAlign: "center",
     color: "black",
     padding: 5,
-    marginTop: 10,
   },
   sum_container_small: {
     display: "flex",
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(238, 245, 39, 0.6)",
     borderRadius: 5,
     alignItems: "center",
-    margin: 10,
+    // margin: 10,
   },
   backButtonText: { color: "#fff", fontSize: 16 },
   total_small: {

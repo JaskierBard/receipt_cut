@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, StyleSheet } from "react-native";
-import Receipts from "./Receipts";
-import HomeScreen from "./paragonScan/ScanScreen";
-import Settings from "./Settings";
-import ShortReceipt from "./ShortReceipt";
+import HomeScreen from "../screens/ScanScreen";
+import Settings from "../screens/Settings";
+import ShortReceipt from "../screens/ShortReceipt";
+import {ListOfReceipts} from "../components/ListOfReceipts";
 
 const Tab = createBottomTabNavigator();
 
@@ -60,7 +60,7 @@ const TabNavigator = () => {
       </Tab.Screen>
       <Tab.Screen
         name="receipts"
-        component={Receipts}
+        component={ListOfReceipts}
         options={{
           title: "Wcześniejsze paragony",
           tabBarIcon: () => (

@@ -7,7 +7,7 @@ interface Props {
 
 const FullScreenLoader = ({text}:Props) => (
     <ImageBackground
-    source={require("../../assets/background.jpeg")}
+    source={require("../../../assets/background.jpeg")}
     style={styles.background}
   >
   <Modal transparent={true} animationType="none" visible={true}>

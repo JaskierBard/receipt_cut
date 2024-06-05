@@ -16,18 +16,17 @@ import { mainStyles } from "../styles/main";
 import { buttonStyles } from "../styles/buttons";
 import { receiptStyles } from "../styles/receipt";
 import { PurchaseItem, ReceiptDetails } from "../types/receipt";
+import { ReceiptList } from "./paragonScan/ReceiptList";
 
 // export interface ParagonsData {
 //   [date: string]: ReceiptDetails[];
 // }
 
-
-
-const ParagonList = () => {
+export const ListOfReceipts = () => {
   const [paragons, setParagons] = useState<ReceiptDetails | any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [separate, setSeparate] = useState<boolean>(false);
-  const [selectedParagon, setSelectedParagon] = useState<PurchaseItem[] | null>(
+  const [selectedParagon, setSelectedParagon] = useState<ReceiptDetails | null>(
     null
   );
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -63,42 +62,42 @@ const ParagonList = () => {
     fetchParagons(formattedDate);
   }, [selectedDate]);
 
-  const renderParagonDetails = (paragon: any) => (
-    <View style={receiptStyles.shop_list}>
-      <Text style={receiptStyles.seller_name}>{paragon.seller_details.name}</Text>
-      <Text style={receiptStyles.seller_address}>{paragon.seller_details.address}</Text>
+  // const renderParagonDetails = (paragon: any) => (
+  //   <View style={receiptStyles.shop_list}>
+  //     <Text style={receiptStyles.seller_name}>{paragon.seller_details.name}</Text>
+  //     <Text style={receiptStyles.seller_address}>{paragon.seller_details.address}</Text>
 
-      <ScrollView style={{ height: "92%" }}>
-        {paragon.purchase_items.map((entry: any, index: any) => (
-          <View key={index} style={receiptStyles.purchase_item}>
-            <Text style={receiptStyles.item_description}>{entry.description}</Text>
-            <Text style={receiptStyles.detail_text}>Kwota: {
-              entry.discount_value === 0
-                ? String(entry.price_before_discount)
-                : String(entry.price_after_discount)
-            } PLN</Text>
-            <Text style={receiptStyles.detail_text}>Ilość: {entry.quantity}</Text>
-            <Text style={receiptStyles.detail_text}>Kategoria: {entry.category}</Text>
-          </View>
-        ))}
-      </ScrollView>
-      <Text style={receiptStyles.seller_address}>{paragon.total}</Text>
-      <View style={buttonStyles.container}>
-        <TouchableOpacity
-          style={buttonStyles.touchable_dark}
-          onPress={() => setSelectedParagon(null)}
-        >
-          <Text style={buttonStyles.text}>Wróć do listy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={buttonStyles.touchable_dark}
-          onPress={() => setSeparate(true)}
-        >
-          <Text style={buttonStyles.text}>Podziel</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  //     <ScrollView style={{ height: "92%" }}>
+  //       {paragon.purchase_items.map((entry: any, index: any) => (
+  //         <View key={index} style={receiptStyles.purchase_item}>
+  //           <Text style={receiptStyles.item_description}>{entry.description}</Text>
+  //           <Text style={receiptStyles.detail_text}>Kwota: {
+  //             entry.discount_value === 0
+  //               ? String(entry.price_before_discount)
+  //               : String(entry.price_after_discount)
+  //           } PLN</Text>
+  //           <Text style={receiptStyles.detail_text}>Ilość: {entry.quantity}</Text>
+  //           <Text style={receiptStyles.detail_text}>Kategoria: {entry.category}</Text>
+  //         </View>
+  //       ))}
+  //     </ScrollView>
+  //     <Text style={receiptStyles.seller_address}>{paragon.total}</Text>
+  //     <View style={buttonStyles.container}>
+  //       <TouchableOpacity
+  //         style={buttonStyles.touchable_dark}
+  //         onPress={() => setSelectedParagon(null)}
+  //       >
+  //         <Text style={buttonStyles.text}>Wróć do listy</Text>
+  //       </TouchableOpacity>
+  //       <TouchableOpacity
+  //         style={buttonStyles.touchable_dark}
+  //         onPress={() => setSeparate(true)}
+  //       >
+  //         <Text style={buttonStyles.text}>Podziel</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   </View>
+  // );
 
   return (
     <ImageBackground
@@ -118,15 +117,28 @@ const ParagonList = () => {
           <>
             {separate ? (
               <Separate
-                paragonsData={selectedParagon}
+                paragonsData={selectedParagon.purchase_items}
                 handleSeparate={handleSeparate}
               />
             ) : (
-              renderParagonDetails(selectedParagon)
+              <>
+                <ReceiptList
+                  list={selectedParagon}
+                  handleDelete={function (): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+                <TouchableOpacity
+                  style={buttonStyles.touchable_dark}
+                  onPress={() => setSelectedParagon(null)}
+                >
+                  <Text style={buttonStyles.text}>Wróć do listy</Text>
+                </TouchableOpacity>
+              </>
             )}
           </>
         ) : (
-          <View >
+          <View>
             <TouchableOpacity
               // style={styles.dateSection}
               onPress={() => {
@@ -145,19 +157,20 @@ const ParagonList = () => {
               paragons.map((entry, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={receiptStyles.purchase_item}
+                  // style={receiptStyles.purchase_item}
                   onPress={() => {
-                    setSelectedParagon(entry.receipt_details)
+                    setSelectedParagon(entry);
                   }}
                 >
-                  <Text style={receiptStyles.purchase_item_text}>
-                    {entry.receipt_details.seller_details.name} -{" "}
-                    {entry.receipt_details.total} PLN
+                  <Text style={{ color: "white" }}>
+                    {entry.seller_details.name} -{entry.total} PLN
                   </Text>
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={receiptStyles.purchase_item_text}>Brak dodanych paragonów tego dnia.</Text>
+              <Text style={{ color: "white" }}>
+                Brak dodanych paragonów tego dnia.
+              </Text>
             )}
           </View>
         )}
@@ -178,5 +191,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default ParagonList;

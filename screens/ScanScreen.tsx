@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, ImageBackground, Image, Text } from "react-native";
-import { buttonStyles } from "../../styles/buttons";
-import { OpenAiChat } from "../../src/chatAI";
-import { ReceiptList } from "./ReceiptList";
-import { systemPrompt, prompt } from "../../utils/data";
-import ProcessingLoader from "../common/ProcessingLoader";
-import { mainStyles } from "../../styles/main";
-import { takePicture } from "../../utils/takePicture";
-import { base64Photo } from "../../types/base64Photo";
-import { SimpleButton } from "../common/SimpleButton";
-import { imageStyles } from "../../styles/image";
-import { ReceiptDetails } from "../../types/receipt";
+import { buttonStyles } from "../styles/buttons";
+import { OpenAiChat } from "../src/chatAI";
+import { ReceiptList } from "../components/paragonScan/ReceiptList";
+import { systemPrompt, prompt } from "../utils/data";
+import ProcessingLoader from "../components/common/Loaders/ProcessingLoader";
+import { mainStyles } from "../styles/main";
+import { takePicture } from "../utils/takePicture";
+import { base64Photo } from "../types/base64Photo";
+import { imageStyles } from "../styles/image";
+import { ReceiptDetails } from "../types/receipt";
+import { SimpleButton } from "../components/common/Buttons/SimpleButton";
 
 const ScanScreen = () => {
   const [image, setImage] = useState<base64Photo>();
@@ -57,7 +57,7 @@ const ScanScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../../assets/background.jpeg")}
+      source={require("../assets/background.jpeg")}
       style={mainStyles.background}
     >
       <View style={mainStyles.container}>

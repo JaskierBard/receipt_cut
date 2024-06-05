@@ -13,8 +13,8 @@ interface Props {
 const ProcessingLoader = ({processingTime}:Props) => (
   <View style={styles.container}>
     <ImageBackground
-      source={require("../../assets/processing.jpeg")}
-      style={styles.background}
+    source={require("../../../assets/background.jpeg")}
+    style={styles.background}
     >
       <ActivityIndicator size={100} color="gold" style={styles.spinner} />
       <View style={styles.funny}>
