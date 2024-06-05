@@ -1,10 +1,10 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { categories } from "../../utils/data";
 import { DiscountType, PurchaseItem } from "../../types/receipt";
 import { receiptStyles } from "../../styles/receipt";
 import ModalSelector from "react-native-modal-selector";
 import { useEffect, useState } from "react";
+import { dynamicStyles } from "../../styles/shop";
 
 interface Props {
   index: number;
@@ -19,6 +19,7 @@ interface Props {
 }
 export const ReceiptItem = (props: Props) => {
   const [correct, setCorrect] = useState<boolean>(false);
+  const shopDynamicStyles = dynamicStyles('dealz');
 
   useEffect(() => {
     const result1 = (props.item.quantity * props.item.unit_price).toFixed(2);
@@ -37,7 +38,7 @@ export const ReceiptItem = (props: Props) => {
   }, []);
 
   return (
-    <View key={props.index} style={receiptStyles.purchase_item}>
+    <View key={props.index} style={shopDynamicStyles.purchase_item}>
       <Text style={receiptStyles.name}>{props.item.item_name}</Text>
       <View style={receiptStyles.details}>
         <View style={{ flexDirection: "row" }}>
@@ -83,7 +84,7 @@ export const ReceiptItem = (props: Props) => {
           <View style={{display:'flex', flexDirection: 'row'}}>
           <Text style={receiptStyles.text}>{props.item.unit} </Text>
           <Text style={receiptStyles.text}>
-            { props.item.unit_price +" szt" }
+            { props.item.unit_price +" zł/szt" }
           </Text>
           </View>
           

@@ -10,6 +10,7 @@ import {
   PurchaseItem,
   ReceiptDetails,
 } from "../../types/receipt";
+import { dynamicStyles } from "../../styles/shop";
 
 interface Props {
   list: ReceiptDetails;
@@ -20,6 +21,9 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
   const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>(
     list.purchase_items
   );
+
+  const shopDynamicStyles = dynamicStyles('dealz');
+
   const [finished, setFinished] = useState<boolean>(false);
   const finishEdit = () => {
     setFinished(true);
@@ -49,11 +53,11 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
   };
 
   return (
-    <View style={receiptStyles.shop_list}>
+    <View style={shopDynamicStyles.shop_list}>
       <View style={receiptStyles.logo}>
         <Image
           style={{ width: "100%", maxWidth: "100%", maxHeight: "100%" }}
-          source={require("../../assets/logos/biedronka.png")}
+          source={require("../../assets/logos/dealz.png")}
           resizeMode="contain"
         />
       </View>
@@ -61,7 +65,7 @@ export const ReceiptList = ({ list, handleDelete }: Props) => {
       {/* <Text style={receiptStyles.seller_address}>
         {list.seller_details.address}
       </Text> */}
-      <View style={receiptStyles.receipt}>
+      <View style={shopDynamicStyles.receipt}>
         <ScrollView style={receiptStyles.container}>
           {purchaseItems &&
             purchaseItems.map((item: any, index: number) => (
